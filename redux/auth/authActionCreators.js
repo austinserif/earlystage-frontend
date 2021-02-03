@@ -1,5 +1,5 @@
 import * as types from './authActionTypes';
-import { SERVER_URL } from '../../config';
+const SERVER_URL = 'https://earlystage-backend-y3tr5.ondigitalocean.app';
 import axios from 'axios';
 
 /**
@@ -19,13 +19,19 @@ const setUser = ({ token, uid, isVerified, keepLoggedIn = false }) => ({
 });
 
 /**
+ * Clears any stale or unwanted authentication information
+ * from auth state.
+ */
+export const clearUser = () => ({ type: types.CLEAR_USER });
+
+/**
  * Sets an auth error message into redux state.
  * @param {String} message
  */
 const setAuthErrorMsg = (message) => ({
   type: types.SET_AUTH_ERROR_MESSAGE,
   payload: {
-    errorMsg: message
+    errorMsg: message || 'There was an error fulfilling your request.'
   }
 });
 
@@ -76,7 +82,7 @@ export const attemptLogin = (email, password) => async (dispatch) => {
     });
 
     // destructure payload from response
-    const { token, uid, isVerified } = response;
+    const { token, uid, isVerified } = response.data;
 
     // return dispatch action with logged in user's token and id
     return dispatch(setUser({ token, uid, isVerified }));
