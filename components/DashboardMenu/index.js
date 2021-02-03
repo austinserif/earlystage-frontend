@@ -11,11 +11,13 @@ const DashboardMenu = () => {
       <Menu.Item>
         <Input placeholder="Search..." />
       </Menu.Item>
-
       <Menu.Item>
         Early Stage Dashboard
         <Menu.Menu>
-          <Menu.Item name="search" active={activeItem === 'Workspaces'} onClick={handleItemClick}>
+          <Menu.Item
+            name="workspaces"
+            active={activeItem === 'Workspaces'}
+            onClick={handleItemClick}>
             Workspaces
           </Menu.Item>
           <Menu.Item name="add" active={activeItem === 'add'} onClick={handleItemClick}>
@@ -31,10 +33,6 @@ const DashboardMenu = () => {
         <Icon name="grid layout" />
         Browse
       </Menu.Item>
-      <Menu.Item name="messages" active={activeItem === 'messages'} onClick={handleItemClick}>
-        Messages
-      </Menu.Item>
-
       <Dropdown item text="More">
         <Dropdown.Menu>
           <Dropdown.Item icon="edit" text="Edit Profile" />
