@@ -1,10 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Button, Image, Header, Input, Form, Message } from 'semantic-ui-react';
+import React, { useEffect } from 'react';
+import { Modal, Button, Input, Form, Message } from 'semantic-ui-react';
 import useLogin from '../hooks/useLogin';
 import { emailRegex } from '../utils/regex';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/dist/client/router';
 
 const LoginModal = ({ open, setOpen, inverted }) => {
-  const [values, err, handleChange, handleReset, handleSubmit, isLoading] = useLogin();
+  // selector state
+  const { token, isLoading, authErrorMessage } = useSelector((s) => s.auth);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (token) {
+      router.push('/dashboard');
+    }
+  });
+
+  const [values, handleChange, handleReset, handleSubmit] = useLogin();
   return (
     <Modal
       closeOnEscape={false}
@@ -16,7 +28,7 @@ const LoginModal = ({ open, setOpen, inverted }) => {
       trigger={<Button inverted={inverted}>Login</Button>}>
       <Modal.Header>Login</Modal.Header>
       <Modal.Content>
-        <Form loading={isLoading} error={!err ? false : true} onSubmit={handleSubmit}>
+        <Form loading={isLoading} error={!authErrorMessage ? false : true} onSubmit={handleSubmit}>
           <Form.Field
             id="form-input-control-email"
             control={Input}
@@ -38,7 +50,9 @@ const LoginModal = ({ open, setOpen, inverted }) => {
             placeholder="Password"
             onChange={handleChange}
           />
-          {err ? <Message error header="Error" content={err || ''} /> : null}
+          {authErrorMessage ? (
+            <Message error header="Error" content={authErrorMessage || ''} />
+          ) : null}
         </Form>
       </Modal.Content>
       <Modal.Actions>
