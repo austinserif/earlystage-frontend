@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Menu, Icon, Button } from 'semantic-ui-react';
+import { Container, Menu, Icon } from 'semantic-ui-react';
 import LoginModal from './LoginModal';
 import styled from 'styled-components';
 import SignUpModal from './SignUpModal';
