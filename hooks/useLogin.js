@@ -1,19 +1,17 @@
 import { useState } from 'react';
-import Axios from 'axios';
-import { SERVER_URL } from '../config';
-import { useSelector } from 'react-redux';
-import { attemptLogin } from '../redux/auth/authActionCreators';
+import { useDispatch } from 'react-redux';
+import { attemptLogin, clearAuthErrorMsg } from '../redux/auth/authActionCreators';
 
 const useLogin = () => {
+  // set initial values as empty strings
   const initial = {
     email: '',
     password: ''
   };
 
-  const token = useSelector((s) => s.auth.token);
-  const isLoading = useSelector((s) => s.auth.isLoading);
-  const err = useSelector((s) => s.auth.authErrorMessage);
+  const dispatch = useDispatch();
 
+  // values
   const [values, setValues] = useState(initial);
 
   const handleChange = (e) => {
@@ -23,12 +21,15 @@ const useLogin = () => {
 
   const handleSubmit = () => {
     const { email, password } = values;
-    attemptLogin(email, password);
+    dispatch(attemptLogin(email, password));
   };
 
-  const handleReset = () => {};
+  const handleReset = () => {
+    setValues(() => initial);
+    dispatch(clearAuthErrorMsg());
+  };
 
-  return [values, err, handleChange, handleReset, handleSubmit, isLoading];
+  return [values, handleChange, handleReset, handleSubmit];
 };
 
 export default useLogin;
