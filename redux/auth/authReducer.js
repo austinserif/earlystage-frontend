@@ -5,7 +5,7 @@ const initialState = {
   keepLoggedIn: false
 };
 
-const userReducer = (state = initialState, action) => {
+const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.SET_USER:
       return { ...state, ...action.payload };
@@ -14,7 +14,7 @@ const userReducer = (state = initialState, action) => {
     case types.CLEAR_USER:
       return { token: null, keepLoggedIn: false };
     case types.SET_AUTH_ERROR_MESSAGE:
-      return { token: null, keepLoggedIn: false, authErrorMessage: action.paylpad.errorMsg };
+      return { token: null, keepLoggedIn: false, authErrorMessage: action.payload.errorMsg };
     case types.CLEAR_AUTH_ERROR_MESSAGE:
       return { authErrorMessage: null };
     case types.SET_AUTH_LOADING:
@@ -26,4 +26,4 @@ const userReducer = (state = initialState, action) => {
   }
 };
 
-export default userReducer;
+export default authReducer;
