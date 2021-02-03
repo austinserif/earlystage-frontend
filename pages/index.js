@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { Button, Icon, Container, Header } from 'semantic-ui-react';
+import { Button, Icon, Header, Loader } from 'semantic-ui-react';
 import Navbar from '../sections/Navbar';
-import { useState } from 'react';
-import LoginModal from '../sections/LoginModal';
+import { useLayoutEffect } from 'react';
+import { useRouter } from 'next/dist/client/router';
+import { useSelector } from 'react-redux';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -28,8 +29,32 @@ const StyledContainerLight = styled.div`
   }
 `;
 
+/**
+ * Renders the unauthenticated landing page at the root
+ * route. If a user's valid jwt token is detected in a
+ * rehydrated piece of redux state, then automatically
+ * navigate to the authenticated home page.
+ */
 const Home = () => {
   const mobile = false;
+
+  // get current auth state values
+  const { token } = useSelector((s) => s.auth);
+
+  // define router object
+  const router = useRouter();
+
+  useLayoutEffect(() => {
+    // if a token is added to state, push the user to their dashboard
+    if (token) {
+      router.push('/dashboard');
+    }
+  }, [token]);
+
+  if (token) {
+    return <Loader />;
+  }
+
   return (
     <>
       <Navbar inverted={true} />
