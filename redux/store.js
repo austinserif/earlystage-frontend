@@ -1,50 +1,57 @@
-import { createStore, applyMiddleware } from 'redux';
+// ./store/store
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+
 import thunk from 'redux-thunk';
-import rootReducer from './reducers';
 
-// create and export redux store with thunk middleware applied
-export default createStore(rootReducer, applyMiddleware(thunk));
+import { createWrapper } from 'next-redux-wrapper';
 
-import { useMemo } from 'react';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-let store;
+import rootReducer from './rootReducer';
 
-const exampleInitialState = {
-  lastUpdate: 0,
-  light: false,
-  count: 0,
-  exampleData: [],
-  error: null
-};
-
-function makeStore(initialState = exampleInitialState) {
-  return createStore(initialState, composeWithDevTools(applyMiddleware()));
-}
-
-export const initializeStore = (preloadedState) => {
-  let _store = store ?? makeStore(preloadedState);
-
-  // After navigating to a page with an initial Redux state, merge that state
-  // with the current state in the store, and create a new store
-  if (preloadedState && store) {
-    _store = makeStore({
-      ...store.getState(),
-      ...preloadedState
+const makeStore = ({ isServer }) => {
+  if (isServer) {
+    //If it's on server side, create a store
+    return configureStore({
+      reducer: rootReducer
     });
-    // Reset the current store
-    store = undefined;
+  } else {
+    //If it's on client side, create a store which will persist
+    // const storage = storage.default
+
+    const persistConfig = {
+      key: 'root',
+      version: 1,
+      whitelist: ['auth'],
+      storage
+    };
+
+    const persistedReducer = persistReducer(persistConfig, rootReducer); // Create a new reducer with our existing reducer
+
+    const store = configureStore({
+      reducer: persistedReducer,
+      middleware: getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+        }
+      }).concat(thunk)
+    });
+
+    store.__persistor = persistStore(store); // This creates a persistor object & push that persisted object to .__persistor, so that we can avail the persistability feature
+
+    return store;
   }
-
-  // For SSG and SSR always create a new store
-  if (typeof window === 'undefined') return _store;
-  // Create the store once in the client
-  if (!store) store = _store;
-
-  return _store;
 };
+// Export the wrapper & wrap the pages/_app.js with this wrapper only
 
-export function useStore(initialState) {
-  const store = useMemo(() => initializeStore(initialState), [initialState]);
-  return store;
-}
+export const wrapper = createWrapper(makeStore);
