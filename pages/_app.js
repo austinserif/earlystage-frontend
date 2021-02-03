@@ -6,7 +6,7 @@ import App from 'next/app';
 
 import '../.semantic/dist/semantic.min.css';
 
-import { wrapper } from '../redux/clientStore';
+import { wrapper } from '../redux/store';
 
 function MyApp({ Component, pageProps }) {
   const store = useStore(pageProps.initialReduxState);
