@@ -1,6 +1,9 @@
 import * as types from './authActionTypes';
-const SERVER_URL = 'https://earlystage-backend-y3tr5.ondigitalocean.app';
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { setUserProfile } from '../user/profile/profileActionCreators';
+import { getWorkspaces } from '../user/workspaces/workspacesActionCreators';
 
 /**
  * Sets new authentication credentials and preferences into state. Called
@@ -84,8 +87,11 @@ export const attemptLogin = (email, password) => async (dispatch) => {
     // destructure payload from response
     const { token, uid, isVerified } = response.data;
 
-    // return dispatch action with logged in user's token and id
-    return dispatch(setUser({ token, uid, isVerified }));
+    // set verification status, token, and uid into state
+    dispatch(setUser({ token, uid, isVerified }));
+
+    // load user's data from the server
+    dispatch(loadAndCacheUserData(token, email));
   } catch (err) {
     // set error message into state
     dispatch(
@@ -94,6 +100,34 @@ export const attemptLogin = (email, password) => async (dispatch) => {
   } finally {
     // tell redux store that all requests are complete
     dispatch(clearIsLoading());
+  }
+};
+
+/**
+ * Loads user profile data and key arrays of workspace and question ids.
+ * Then, dispatches additional actionCreators to make follow up requests
+ * and load all necessary pieces of data into state.
+ *
+ * @param {String} token
+ * @param {String} email
+ */
+const loadAndCacheUserData = (token, email) => async (dispatch) => {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: `${SERVER_URL}/users/${email}?_token=${token}`
+    });
+
+    // get sub documents
+    const { _id, account, workspaces } = response.data;
+
+    // cache profile data
+    dispatch(setUserProfile({ _id, email, name: account.name }));
+
+    // get and cache workspaces data
+    dispatch(getWorkspaces(email, token, workspaces));
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -120,7 +154,6 @@ export const attemptRegistration = (name, email, password) => async (dispatch) =
     const { token, uid, isVerified } = response;
 
     // registration process automatically logs in the new user and returns a token, uid, and verification status
-    // --> return dispatch action with logged in user's token and id
     return dispatch(setUser({ token, uid, isVerified }));
   } catch (err) {
     dispatch(
