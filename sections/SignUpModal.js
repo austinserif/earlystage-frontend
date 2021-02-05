@@ -2,17 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Image, Header, Input, Form, Message } from 'semantic-ui-react';
 import { emailRegex } from '../utils/regex';
 import useSignUp from '../hooks/useSignUp';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/dist/client/router';
 
 const SignUpModal = ({ open, setOpen, inverted }) => {
-  const [values, err, handleChange, handleReset, handleSubmit, isLoading] = useSignUp();
+  const [values, handleChange, handleReset, handleSubmit] = useSignUp();
+
+  const { token, isLoading, authErrorMessage } = useSelector((s) => s.auth);
+  const router = useRouter();
 
   useEffect(() => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('there is no error message right now');
+    if (token) {
+      router.push('/dashboard');
     }
-  }, [err]);
+  });
+
   return (
     <Modal
       closeOnEscape={false}
@@ -24,7 +28,7 @@ const SignUpModal = ({ open, setOpen, inverted }) => {
       trigger={<Button inverted={inverted}>Sign Up</Button>}>
       <Modal.Header>Sign Up</Modal.Header>
       <Modal.Content>
-        <Form loading={isLoading} error={!err ? false : err}>
+        <Form loading={isLoading} error={!authErrorMessage ? false : true}>
           <Form.Field
             id="form-input-control-name"
             control={Input}
@@ -34,7 +38,7 @@ const SignUpModal = ({ open, setOpen, inverted }) => {
             value={values.name}
             placeholder="Name"
             onChange={handleChange}
-            error={err ? true : false}
+            error={authErrorMessage ? true : false}
           />
           <Form.Field
             id="form-input-control-email"
@@ -45,7 +49,7 @@ const SignUpModal = ({ open, setOpen, inverted }) => {
             value={values.email}
             placeholder="Email"
             onChange={handleChange}
-            error={err ? true : false}
+            error={authErrorMessage ? true : false}
           />
           <Form.Field
             id="form-input-control-password"
@@ -57,9 +61,11 @@ const SignUpModal = ({ open, setOpen, inverted }) => {
             value={values.password}
             placeholder="Password"
             onChange={handleChange}
-            error={err ? true : false}
+            error={authErrorMessage ? true : false}
           />
-          {err ? <Message error header="Error" content={err || ''} /> : null}
+          {authErrorMessage ? (
+            <Message error header="Error" content={authErrorMessage || ''} />
+          ) : null}
         </Form>
       </Modal.Content>
       <Modal.Actions>
