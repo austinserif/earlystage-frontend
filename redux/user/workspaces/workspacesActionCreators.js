@@ -52,11 +52,12 @@ export const clearNewWorkspaceErrMsg = () => ({ type: types.CLEAR_NEW_WORKSPACE_
  * @param {String} token
  * @param {String[]} workspaceIdArray
  */
-export const getWorkspaces = (email, token, workspaceIdArray) => async (dispatch) => {
+export const getWorkspacesFromIds = (email, token, workspaceIdArray) => async (dispatch) => {
   try {
     // initiate loading
     dispatch(setIsLoading());
 
+    // formulate request
     const getRequest = (url, email, workspaceId, token) =>
       axios.get(`${url}/users/${email}/workspaces/${workspaceId}?_token=${token}`);
 
@@ -65,7 +66,7 @@ export const getWorkspaces = (email, token, workspaceIdArray) => async (dispatch
       workspaceIdArray.map((v) => getRequest(SERVER_URL, email, v, token))
     );
 
-    // map response data array into a workspace object
+    // map response data array into a workspaces object
     const workspaces = {};
 
     responses.forEach((v) => {
@@ -78,7 +79,6 @@ export const getWorkspaces = (email, token, workspaceIdArray) => async (dispatch
       // the original data response object
       workspaces[id] = data;
     });
-
     // dispatch workspace object
     dispatch(setWorkspaces(workspaces));
   } catch (err) {
