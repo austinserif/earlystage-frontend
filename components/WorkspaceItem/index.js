@@ -1,15 +1,20 @@
 import React from 'react';
-import { Card, Icon } from 'semantic-ui-react';
+import { Card, Icon, Button } from 'semantic-ui-react';
 
 const WorkspaceItem = ({ companyName, industry, componentSum }) => (
   <Card
     header={companyName}
     meta={industry}
     extra={
-      <a>
-        <Icon name="tasks" />
-        {`${componentSum}`} Components
-      </a>
+      <>
+        <a>
+          <Icon name="tasks" />
+          {`${componentSum}`} Components
+        </a>
+        <Button floated="right" color="blue">
+          Edit
+        </Button>
+      </>
     }
   />
 );
