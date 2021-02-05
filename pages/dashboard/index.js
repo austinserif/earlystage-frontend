@@ -14,7 +14,10 @@ const Dashboard = () => {
       </Container>
 
       <Container text style={{ marginTop: '7em' }}>
+        {/* Dashboard Header contains title text and a button for creating new workspaces */}
         <DashboardHeader title="Dashboard" />
+
+        {/* If the user had any workspaces, they will be displayed here */}
         <WorkspaceList workspaceArray={Object.entries(workspaces)} />
       </Container>
     </>
