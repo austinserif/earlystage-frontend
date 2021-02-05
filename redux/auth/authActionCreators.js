@@ -3,7 +3,8 @@ const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { setUserProfile, clearUserProfile } from '../user/profile/profileActionCreators';
-import { getWorkspaces, clearWorkspaces } from '../user/workspaces/workspacesActionCreators';
+import { getWorkspacesFromIds, clearWorkspaces } from '../user/workspaces/workspacesActionCreators';
+import { getUserData } from '../../api/user';
 
 /**
  * Sets new authentication credentials and preferences into state. Called
@@ -11,13 +12,14 @@ import { getWorkspaces, clearWorkspaces } from '../user/workspaces/workspacesAct
  *
  * @param {Object} user object containing tokne, uid, and keepLoggedIn values
  */
-const setUser = ({ token, uid, isVerified, keepLoggedIn = false }) => ({
+const setUser = ({ token, uid, isVerified, email, keepLoggedIn = false }) => ({
   type: types.SET_USER,
   payload: {
     token,
     uid,
     isVerified,
-    keepLoggedIn
+    keepLoggedIn,
+    email
   }
 });
 
@@ -100,7 +102,7 @@ export const attemptLogin = (email, password) => async (dispatch) => {
     const { token, uid, isVerified } = response.data;
 
     // set verification status, token, and uid into state
-    dispatch(setUser({ token, uid, isVerified }));
+    dispatch(setUser({ email, token, uid, isVerified }));
 
     // load user's data from the server
     dispatch(loadAndCacheUserData(token, email));
@@ -123,21 +125,25 @@ export const attemptLogin = (email, password) => async (dispatch) => {
  * @param {String} token
  * @param {String} email
  */
-const loadAndCacheUserData = (token, email) => async (dispatch) => {
+const loadAndCacheUserData = (email, token) => async (dispatch) => {
   try {
+    // const data = await getUserData(); // returns => { _id, name, email, isVerified, isAdmin, workspaces, questions, metadata }
+
     const response = await axios({
       method: 'GET',
       url: `${SERVER_URL}/users/${email}?_token=${token}`
     });
 
+    const { _id, account, workspaces, questions } = response.data;
+
     // get sub documents
-    const { _id, account, workspaces } = response.data;
+    const { name } = account;
 
     // cache profile data
-    dispatch(setUserProfile({ _id, email, name: account.name }));
+    dispatch(setUserProfile({ _id, email, name }));
 
     // get and cache workspaces data
-    dispatch(getWorkspaces(email, token, workspaces));
+    dispatch(getWorkspacesFromIds(email, token, workspaces));
   } catch (err) {
     console.log(err);
   }
