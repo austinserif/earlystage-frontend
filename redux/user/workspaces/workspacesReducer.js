@@ -1,9 +1,8 @@
 import * as types from './workspacesActionTypes';
 
 const initialState = {
-  metadata: {
-    isLoading: false
-  },
+  isLoading: false,
+  newWorkspaceErrMsg: null,
   workspaces: {}
 };
 
@@ -16,6 +15,18 @@ const workspacesReducer = (state = initialState, action) => {
           ...state.workspaces,
           ...action.payload.workspaces
         }
+      };
+
+    case types.SET_NEW_WORKSPACE_ERROR_MSG:
+      return {
+        ...state,
+        newWorkspaceErrMsg: action.payload.message
+      };
+
+    case types.CLEAR_NEW_WORKSPACE_ERROR_MSG:
+      return {
+        ...state,
+        newWorkspaceErrMsg: null
       };
 
     case types.CLEAR_WORKSPACES:
@@ -55,6 +66,18 @@ const workspacesReducer = (state = initialState, action) => {
         }
       };
     }
+
+    case types.SET_WORKSPACE_IS_LOADING:
+      return {
+        ...state,
+        isLoading: true
+      };
+
+    case types.CLEAR_WORKSPACE_IS_LOADING:
+      return {
+        ...state,
+        isLoading: false
+      };
 
     default:
       return state;
