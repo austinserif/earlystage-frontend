@@ -1,9 +1,9 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import WorkspaceItem from '../components/WorkspaceItem';
-import { Loader } from 'semantic-ui-react';
+import { Card } from 'semantic-ui-react';
 
 const WorkspaceList = ({ workspaceArray }) => {
+  // map the input prop `workspaceArray` into an array of JSX `WorkspaceItem` compaonents
   const components = workspaceArray.map((item) => {
     const [k, v] = item;
     return (
@@ -11,12 +11,13 @@ const WorkspaceList = ({ workspaceArray }) => {
         key={k}
         companyName={v.entity.name}
         industry={v.entity === undefined ? '' : v.entity.domain}
-        description={'This is a company!'}
         componentSum={v.components ? v.components.length : 0}
       />
     );
   });
-  return <>{components}</>;
+
+  // render list of components if any exist
+  return <Card.Group>{components}</Card.Group>;
 };
 
 export default WorkspaceList;
