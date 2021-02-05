@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container, Menu, Icon, Button } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { clearUser } from '../redux/auth/authActionCreators';
+import { flushUserDataCache } from '../redux/auth/authActionCreators';
 import { useRouter } from 'next/dist/client/router';
 
 const ButtonContainer = styled.div`
@@ -38,7 +38,7 @@ const DashboardNavbar = () => {
             <ButtonContainer>
               <Button
                 onClick={() => {
-                  dispatch(clearUser());
+                  dispatch(flushUserDataCache());
                   router.push('/');
                 }}>
                 Log out
