@@ -1,5 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Header, Button, Segment, Icon, Divider } from 'semantic-ui-react';
+import NewWorkspaceModal from '../../sections/NewWorkspaceModal';
+import styled from 'styled-components';
+
+const ButtonContainer = styled.div`
+  margin: 5px;
+`;
 
 /**
  * Renders a Header above a dividing line to seperate
@@ -8,21 +14,21 @@ import { Header, Button, Segment, Icon, Divider } from 'semantic-ui-react';
  * @param {Object} props
  * @param {String} props.title title of the section to be displayed
  */
-const DashboardHeader = ({ title }) => (
-  <Segment clearing>
-    <Header floated="right">
-      <Button animated color="green">
-        <Button.Content visible>New Workspace</Button.Content>
-        <Button.Content hidden>
-          <Icon name="add" />
-        </Button.Content>
-      </Button>
-    </Header>
-    <Header as="h2" floated="left">
-      {title}
-    </Header>
-    <Divider clearing />
-  </Segment>
-);
+const DashboardHeader = ({ title }) => {
+  const [newWorkspaceModalOpen, setNewWorkspaceModalOpen] = useState(false);
+  return (
+    <Segment clearing>
+      <Header floated="right">
+        <ButtonContainer>
+          <NewWorkspaceModal open={newWorkspaceModalOpen} setOpen={setNewWorkspaceModalOpen} />
+        </ButtonContainer>
+      </Header>
+      <Header as="h2" floated="left">
+        {title}
+      </Header>
+      <Divider clearing />
+    </Segment>
+  );
+};
 
 export default DashboardHeader;
