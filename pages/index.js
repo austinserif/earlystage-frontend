@@ -4,6 +4,8 @@ import Navbar from '../sections/Navbar';
 import { useLayoutEffect } from 'react';
 import { useRouter } from 'next/dist/client/router';
 import { useSelector } from 'react-redux';
+import HomepageLayout from '../sections/HomePageLayoutFiller';
+import Footer from '../sections/Footer';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -85,7 +87,8 @@ const Home = () => {
           <Icon name="right arrow" />
         </Button>
       </StyledContainer>
-      <StyledContainerLight />
+      <HomepageLayout />
+      <Footer />
     </>
   );
 };
