@@ -1,6 +1,6 @@
 import * as types from './workspacesActionTypes';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
 /**
@@ -29,6 +29,22 @@ const setIsLoading = () => ({
 const clearIsLoading = () => ({
   type: types.CLEAR_WORKSPACE_IS_LOADING
 });
+
+/**
+ * Sets a new error message into redux state
+ * @param {String} message error message for display
+ */
+const setNewWorkspaceErrMsg = (message) => {
+  return {
+    type: types.SET_NEW_WORKSPACE_ERROR_MSG,
+    payload: {
+      message
+    }
+  };
+};
+
+/** Sets new workspace error message state back to null */
+export const clearNewWorkspaceErrMsg = () => ({ type: types.CLEAR_NEW_WORKSPACE_ERROR_MSG });
 
 /**
  *
@@ -74,6 +90,7 @@ export const getWorkspaces = (email, token, workspaceIdArray) => async (dispatch
 
 export const createNewWorkspace = (name, domain, credentials) => async (dispatch) => {
   try {
+    dispatch(setIsLoading());
     // get credentials from obj
     const { token, email } = credentials;
 
@@ -87,11 +104,18 @@ export const createNewWorkspace = (name, domain, credentials) => async (dispatch
       }
     });
 
-    const body = response.data;
-    delete body._id;
+    console.log(response.data);
 
-    dispatch(setWorkspaces({ [response.data._id]: body }));
+    const body = response.data; // get data for storage in state
+
+    delete body._id; // delete _id because it will be the key
+
+    dispatch(setWorkspaces({ [response.data._id]: body })); // dispatch key-val pair where _id is the key
   } catch (err) {
-    console.log(err);
+    dispatch(
+      setNewWorkspaceErrMsg(err.message || 'There was an error creating your new workspace')
+    );
+  } finally {
+    dispatch(clearIsLoading());
   }
 };
