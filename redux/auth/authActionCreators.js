@@ -2,8 +2,8 @@ import * as types from './authActionTypes';
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { setUserProfile } from '../user/profile/profileActionCreators';
-import { getWorkspaces } from '../user/workspaces/workspacesActionCreators';
+import { setUserProfile, clearUserProfile } from '../user/profile/profileActionCreators';
+import { getWorkspaces, clearWorkspaces } from '../user/workspaces/workspacesActionCreators';
 
 /**
  * Sets new authentication credentials and preferences into state. Called
@@ -58,6 +58,18 @@ const setIsLoading = () => ({
 const clearIsLoading = () => ({
   type: types.CLEAR_AUTH_LOADING
 });
+
+export const flushUserDataCache = () => async (dispatch) => {
+  // clear auth state
+  dispatch(clearUser());
+
+  // clear profile state
+  dispatch(clearUserProfile());
+
+  // clear workspaces state
+  dispatch(clearWorkspaces());
+  // add others here as integrated ....
+};
 
 /**
  * Attemps login given email and password credentials passed as args. If successful,
@@ -131,6 +143,17 @@ const loadAndCacheUserData = (token, email) => async (dispatch) => {
   }
 };
 
+/**
+ * Takes a full name, email, and password and
+ * calls the server with that information to create
+ * a new user. If a valid response is returned, the
+ * function dispatches the `attemptLogin` action creator
+ * to authomatically login the user.
+ *
+ * @param {String} name full name of new user
+ * @param {String} email email address
+ * @param {String} password password
+ */
 export const attemptRegistration = (name, email, password) => async (dispatch) => {
   try {
     // tell redux store that data is being loaded
@@ -140,7 +163,7 @@ export const attemptRegistration = (name, email, password) => async (dispatch) =
     const apiRoute = `${SERVER_URL}/users`;
 
     // call api
-    const response = await axios({
+    await axios({
       method: 'POST',
       url: apiRoute,
       data: {
@@ -150,12 +173,10 @@ export const attemptRegistration = (name, email, password) => async (dispatch) =
       }
     });
 
-    // destructure payload from response
-    const { token, uid, isVerified } = response;
-
-    // registration process automatically logs in the new user and returns a token, uid, and verification status
-    return dispatch(setUser({ token, uid, isVerified }));
+    // if response is valid, attempt login
+    return dispatch(attemptLogin(email, password));
   } catch (err) {
+    console.log(err);
     dispatch(
       setAuthErrorMsg(err.message || 'Your registration could not be processed at this time')
     );
