@@ -1,6 +1,6 @@
 import * as types from './workspacesActionTypes';
-import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
 /**
@@ -13,6 +13,8 @@ export const setWorkspaces = (workspaces) => ({
     workspaces
   }
 });
+
+export const clearWorkspaces = () => ({ type: types.CLEAR_WORKSPACES });
 
 /**
  * Sets loading flag to true
@@ -39,8 +41,6 @@ export const getWorkspaces = (email, token, workspaceIdArray) => async (dispatch
     // initiate loading
     dispatch(setIsLoading());
 
-    console.log(email, token, workspaceIdArray);
-
     const getRequest = (url, email, workspaceId, token) =>
       axios.get(`${url}/users/${email}/workspaces/${workspaceId}?_token=${token}`);
 
@@ -48,8 +48,6 @@ export const getWorkspaces = (email, token, workspaceIdArray) => async (dispatch
     const responses = await axios.all(
       workspaceIdArray.map((v) => getRequest(SERVER_URL, email, v, token))
     );
-
-    console.log(responses);
 
     // map response data array into a workspace object
     const workspaces = {};
@@ -71,5 +69,29 @@ export const getWorkspaces = (email, token, workspaceIdArray) => async (dispatch
     console.log(err);
   } finally {
     dispatch(clearIsLoading());
+  }
+};
+
+export const createNewWorkspace = (name, domain, credentials) => async (dispatch) => {
+  try {
+    // get credentials from obj
+    const { token, email } = credentials;
+
+    // call api with creds and data
+    const response = await axios({
+      method: 'POST',
+      url: `${SERVER_URL}/users/${email}/workspaces?_token=${token}`,
+      data: {
+        name,
+        domain
+      }
+    });
+
+    const body = response.data;
+    delete body._id;
+
+    dispatch(setWorkspaces({ [response.data._id]: body }));
+  } catch (err) {
+    console.log(err);
   }
 };
