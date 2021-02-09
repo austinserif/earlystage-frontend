@@ -4,9 +4,18 @@ import useLogin from '../hooks/useLogin';
 import { emailRegex } from '../utils/regex';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/dist/client/router';
+import cookies from 'cookie-cutter';
 
+/**
+ * `LoginModal` is renders a Login button that opens
+ * a login form when selected.
+ *
+ * @param {Object} props
+ * @param {Boolean} props.open
+ * @param {Function} props.setOpen
+ * @inver
+ */
 const LoginModal = ({ open, setOpen, inverted }) => {
-  // selector state
   const { token, isLoading, authErrorMessage } = useSelector((s) => s.auth);
   const router = useRouter();
 
