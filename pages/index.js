@@ -1,35 +1,18 @@
 import styled from 'styled-components';
-import { Button, Icon, Header, Loader } from 'semantic-ui-react';
+import { Button, Icon, Header, Loader, Segment, Grid, Image } from 'semantic-ui-react';
 import Navbar from '../sections/Navbar';
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { useRouter } from 'next/dist/client/router';
 import { useSelector } from 'react-redux';
 import HomepageLayout from '../sections/HomePageLayoutFiller';
 import Footer from '../sections/Footer';
 
-const StyledContainer = styled.div`
-  display: flex;
-  height: 500px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #1b1c1d;
-  div {
-    margin: 10px 0 10px 0;
-  }
-`;
+import notesIllustration from '../assets/img/notes.svg';
+import axios from 'axios';
+import { setUserProfile } from '../redux/user/profile/profileActionCreators';
+import Cookies from 'cookie-cutter';
 
-const StyledContainerLight = styled.div`
-  display: flex;
-  height: 500px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-  div {
-    margin: 10px 0 10px 0;
-  }
-`;
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
 /**
  * Renders the unauthenticated landing page at the root
@@ -40,56 +23,66 @@ const StyledContainerLight = styled.div`
 const Home = () => {
   const mobile = false;
 
-  // get current auth state values
-  const { token } = useSelector((s) => s.auth);
-
-  // define router object
-  const router = useRouter();
-
-  useLayoutEffect(() => {
-    // if a token is added to state, push the user to their dashboard
-    if (token) {
-      router.push('/dashboard');
-    }
-  }, [token]);
-
-  if (token) {
-    return <Loader />;
-  }
-
   return (
     <>
-      <Navbar inverted={true} />
-      <StyledContainer>
-        <Header
-          inverted
-          as="h2"
-          content="Earlystage Due Diligence"
-          style={{
-            fontSize: mobile ? '2em' : '4em',
-            fontWeight: 'normal',
-            marginBottom: 0,
-            marginTop: mobile ? '1.5em' : '3em'
-          }}
-        />
-        <Header
-          inverted
-          as="h2"
-          content="Do whatever you want when you want to."
-          style={{
-            fontSize: mobile ? '1.5em' : '1.7em',
-            fontWeight: 'normal',
-            marginTop: mobile ? '0.5em' : '1.5em'
-          }}
-        />
-        <Button primary size="huge">
-          Get Started
-          <Icon name="right arrow" />
-        </Button>
-      </StyledContainer>
+      <Navbar inverted={false} />
+      <Segment style={{ padding: '3em 0em' }} vertical>
+        <Grid container stackable verticalAlign="middle">
+          <Grid.Row>
+            <Grid.Column width={8}>
+              <Grid.Row>
+                <Header
+                  as="h1"
+                  content="Want to spend less time on due diligence?"
+                  style={{
+                    fontSize: mobile ? '2em' : '5em',
+                    fontWeight: 'bold',
+                    marginBottom: 30,
+                    marginTop: mobile ? '1.5em' : '2em'
+                  }}
+                />
+              </Grid.Row>
+              <Grid.Row>
+                <p style={{ fontSize: '1.50em', marginBottom: 30 }}>
+                  Use modular components to compile due diligence documentation faster, and with
+                  more flexibility than ever before.
+                </p>
+              </Grid.Row>
+              <Grid.Row>
+                <Button size="massive" icon labelPosition="right" color="yellow">
+                  Get Started
+                  <Icon name="arrow right" />
+                </Button>
+              </Grid.Row>
+            </Grid.Column>
+            <Grid.Column floated="right" width={6}>
+              <Image rounded size="large" src={notesIllustration} />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Segment>
       <HomepageLayout />
       <Footer />
     </>
   );
 };
+
+export const getServerSideProps = async (ctx) => {
+  // destructure credential related cookies
+  const { token, isVerified, email } = ctx.req.cookies;
+
+  // if all the necessary tokens are found in cookies, redirect the requesting client to their dashboard
+  if (token && isVerified && email && ctx.res) {
+    ctx.res.writeHead(302, { Location: '/dashboard' });
+    ctx.res.end();
+    return { props: {} }; // return empty props object
+  }
+
+  return {
+    props: {
+      cookies: ctx.req.cookies
+    }
+  };
+};
+
 export default Home;
