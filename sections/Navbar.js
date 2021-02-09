@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Container, Menu, Icon } from 'semantic-ui-react';
+import { Container, Menu, Image } from 'semantic-ui-react';
 import LoginModal from './LoginModal';
 import styled from 'styled-components';
 import SignUpModal from './SignUpModal';
+import Logo from '../assets/img/logo.svg';
 
 const ButtonContainer = styled.div`
   margin: 5px;
@@ -13,10 +14,10 @@ const Navbar = ({ inverted }) => {
   const [signUpModalOpen, setSignUpModalOpen] = useState(false);
   return (
     <Menu inverted={inverted} fixed="top" borderless>
-      <Container text>
+      <Container>
         <Menu.Item as="a">
-          <ButtonContainer>
-            <Icon name="home" size="large" />
+          <ButtonContainer style={{ marginLeft: '0px' }}>
+            <Image size="tiny" src={Logo} />
           </ButtonContainer>
         </Menu.Item>
 
@@ -26,7 +27,7 @@ const Navbar = ({ inverted }) => {
               <LoginModal inverted={inverted} open={loginModalOpen} setOpen={setLoginModalOpen} />
             </ButtonContainer>
 
-            <ButtonContainer>
+            <ButtonContainer style={{ marginRight: '0px' }}>
               <SignUpModal
                 inverted={inverted}
                 open={signUpModalOpen}
