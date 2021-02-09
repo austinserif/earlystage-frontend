@@ -1,5 +1,6 @@
 import * as types from './workspacesActionTypes';
 import axios from 'axios';
+import { Promise } from 'es6-promise';
 
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
@@ -46,38 +47,52 @@ const setNewWorkspaceErrMsg = (message) => {
 /** Sets new workspace error message state back to null */
 export const clearNewWorkspaceErrMsg = () => ({ type: types.CLEAR_NEW_WORKSPACE_ERROR_MSG });
 
+export const loadAndSetWorkspace = (email, token, workspaceId) => async (dispatch) => {
+  try {
+    // get details pertaining to a single workspace from server
+    const response = await axios({
+      method: 'GET',
+      url: `${SERVER_URL}/users/${email}/workspaces/${workspaceId}?_token=${token}`
+    });
+
+    // dispatch action creator with newly added data
+    dispatch(setWorkspaces({ [workspaceId]: response.data }));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 /**
  *
  * @param {String} email
  * @param {String} token
  * @param {String[]} workspaceIdArray
  */
-export const getWorkspacesFromIds = (email, token, workspaceIdArray) => async (dispatch) => {
+export const getWorkspacesFromIds = (email, token, workspaceIdArray = []) => async (dispatch) => {
   try {
     // initiate loading
     dispatch(setIsLoading());
 
-    // formulate request
-    const getRequest = (url, email, workspaceId, token) =>
-      axios.get(`${url}/users/${email}/workspaces/${workspaceId}?_token=${token}`);
+    const requestArray = workspaceIdArray.map((v) => {
+      return `${SERVER_URL}/users/${email}/workspaces/${v}?_token=${token}`;
+    });
+
+    requestArray.forEach((v) => console.log(v));
 
     // request data for all workspace ids
-    const responses = await axios.all(
-      workspaceIdArray.map((v) => getRequest(SERVER_URL, email, v, token))
-    );
+    const responses = await Promise.all(requestArray);
 
     // map response data array into a workspaces object
     const workspaces = {};
 
-    responses.forEach((v) => {
+    responses.forEach((v, i) => {
+      // console.log(v.data.entity);
       const { data } = v; // destructure data object from response
-      const id = data._id; // isolate id
-      delete data._id; // delete id from original object
 
       // set key-value pair into workspaces object, where the
       // key is the workspaceId, and the value is the rest of
       // the original data response object
-      workspaces[id] = data;
+      workspaces[workspaceIdArray[i]] = data;
     });
     // dispatch workspace object
     dispatch(setWorkspaces(workspaces));
