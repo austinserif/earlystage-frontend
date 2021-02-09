@@ -17,17 +17,17 @@ const ButtonContainer = styled.div`
 const DashboardHeader = ({ title }) => {
   const [newWorkspaceModalOpen, setNewWorkspaceModalOpen] = useState(false);
   return (
-    <Segment clearing>
+    <>
       <Header floated="right">
         <ButtonContainer>
           <NewWorkspaceModal open={newWorkspaceModalOpen} setOpen={setNewWorkspaceModalOpen} />
         </ButtonContainer>
       </Header>
-      <Header as="h2" floated="left">
+      <Header as="h1" floated="left">
         {title}
       </Header>
       <Divider clearing />
-    </Segment>
+    </>
   );
 };
 
