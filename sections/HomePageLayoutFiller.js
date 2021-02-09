@@ -1,44 +1,14 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable react/no-multi-comp */
 
-import { createMedia } from '@artsy/fresnel';
+import notesIllustration from '../assets/img/notes.svg';
+import veronika from '../assets/img/veronika.jpg';
 
 import React from 'react';
-import { Button, Container, Divider, Grid, Header, Image, List, Segment } from 'semantic-ui-react';
+import { Button, Container, Divider, Grid, Header, Image, Segment } from 'semantic-ui-react';
 
 const HomepageLayout = () => (
   <Container>
-    <Segment style={{ padding: '8em 0em' }} vertical>
-      <Grid container stackable verticalAlign="middle">
-        <Grid.Row>
-          <Grid.Column width={8}>
-            <Header as="h3" style={{ fontSize: '2em' }}>
-              We Help Companies and Companions
-            </Header>
-            <p style={{ fontSize: '1.33em' }}>
-              We can give your company superpowers to do things that they never thought possible.
-              Let us delight your customers and empower your needs... through pure data analytics.
-            </p>
-            <Header as="h3" style={{ fontSize: '2em' }}>
-              We Make Bananas That Can Dance
-            </Header>
-            <p style={{ fontSize: '1.33em' }}>
-              Yes that&apos;s right, you thought it was the stuff of dreams, but even bananas can be
-              bioengineered.
-            </p>
-          </Grid.Column>
-          <Grid.Column floated="right" width={6}>
-            <Image bordered rounded size="large" src="/images/wireframe/white-image.png" />
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column textAlign="center">
-            <Button size="huge">Check Them Out</Button>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </Segment>
-
     <Segment style={{ padding: '0em' }} vertical>
       <Grid celled="internally" columns="equal" stackable>
         <Grid.Row textAlign="center">
@@ -50,6 +20,7 @@ const HomepageLayout = () => (
           </Grid.Column>
           <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
             <Header as="h3" style={{ fontSize: '2em' }}>
+              <Image circular size="big" src={veronika} />
               &quot;I shouldn&apos;t have gone with their competitor.&quot;
             </Header>
             <p style={{ fontSize: '1.33em' }}>
