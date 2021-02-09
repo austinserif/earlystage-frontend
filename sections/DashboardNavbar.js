@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { flushUserDataCache } from '../redux/auth/authActionCreators';
 import { useRouter } from 'next/dist/client/router';
+import cookieCutter from 'cookie-cutter';
 
 const ButtonContainer = styled.div`
   margin: 5px;
@@ -38,8 +39,11 @@ const DashboardNavbar = () => {
             <ButtonContainer>
               <Button
                 onClick={() => {
-                  dispatch(flushUserDataCache());
-                  router.push('/');
+                  // dispatch(flushUserDataCache());
+                  cookieCutter.set('token', '', { expires: new Date(0) });
+                  cookieCutter.set('email', '', { expires: new Date(0) });
+                  cookieCutter.set('isVerified', '', { expires: new Date(0) });
+                  router.replace('/');
                 }}>
                 Log out
               </Button>
