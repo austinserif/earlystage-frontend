@@ -3,7 +3,7 @@ const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { setUserProfile, clearUserProfile } from '../user/profile/profileActionCreators';
-import { getWorkspacesFromIds, clearWorkspaces } from '../user/workspaces/workspacesActionCreators';
+import { getWorkspacesFromIds, clearWorkspaces, loadAndSetWorkspace } from '../user/workspaces/workspacesActionCreators';
 import { getUserData } from '../../api/user';
 
 /**
@@ -33,7 +33,7 @@ export const clearUser = () => ({ type: types.CLEAR_USER });
  * Sets an auth error message into redux state.
  * @param {String} message
  */
-const setAuthErrorMsg = (message) => ({
+export const setAuthErrorMsg = (message) => ({
   type: types.SET_AUTH_ERROR_MESSAGE,
   payload: {
     errorMsg: message || 'There was an error fulfilling your request.'
@@ -49,7 +49,7 @@ export const clearAuthErrorMsg = () => ({ type: types.CLEAR_AUTH_ERROR_MESSAGE }
  * Sets loading flag to true, usually called from
  * async auth functions that require fetching data.
  */
-const setIsLoading = () => ({
+export const setIsLoading = () => ({
   type: types.SET_AUTH_LOADING
 });
 
@@ -57,7 +57,7 @@ const setIsLoading = () => ({
  * Sets loading flag back to false, called
  * after reciept of completed api call.
  */
-const clearIsLoading = () => ({
+export const clearIsLoading = () => ({
   type: types.CLEAR_AUTH_LOADING
 });
 
@@ -88,7 +88,8 @@ export const attemptLogin = (email, password) => async (dispatch) => {
     // build endpoint url
     const apiRoute = `${SERVER_URL}/login`;
 
-    // call api
+    // call /login endpoint, returns --> data: { token: <String>, uid: <String>, isVerified: <Boolean> }
+    // NOTE: uid here is commensurate to _id when refering to the current user (should probably change this)
     const response = await axios({
       method: 'POST',
       url: apiRoute,
@@ -101,11 +102,14 @@ export const attemptLogin = (email, password) => async (dispatch) => {
     // destructure payload from response
     const { token, uid, isVerified } = response.data;
 
-    // set verification status, token, and uid into state
+    // set verification status, token, email, and uid into state
     dispatch(setUser({ email, token, uid, isVerified }));
 
-    // load user's data from the server
-    dispatch(loadAndCacheUserData(token, email));
+    // prevent additional API calls for unverified users
+    if (isVerified) {
+      // load user's data from the server
+      dispatch(loadAndCacheUserData(email, token));
+    }
   } catch (err) {
     // set error message into state
     dispatch(
@@ -134,16 +138,17 @@ const loadAndCacheUserData = (email, token) => async (dispatch) => {
       url: `${SERVER_URL}/users/${email}?_token=${token}`
     });
 
-    const { _id, account, workspaces, questions } = response.data;
+    const { workspaces } = response.data;
 
-    // get sub documents
-    const { name } = account;
+    for (let workspaceId of workspaces) {
+      dispatch(loadAndSetWorkspace(email, token, workspaceId));
+    }
 
     // cache profile data
-    dispatch(setUserProfile({ _id, email, name }));
+    dispatch(setUserProfile(response.data));
 
     // get and cache workspaces data
-    dispatch(getWorkspacesFromIds(email, token, workspaces));
+    // dispatch(getWorkspacesFromIds(email, token));
   } catch (err) {
     console.log(err);
   }
@@ -168,7 +173,7 @@ export const attemptRegistration = (name, email, password) => async (dispatch) =
     // build endpoint url
     const apiRoute = `${SERVER_URL}/users`;
 
-    // call api
+    // call api this will return an object with a success message --> { message: "Your registration was a success!"}
     await axios({
       method: 'POST',
       url: apiRoute,
