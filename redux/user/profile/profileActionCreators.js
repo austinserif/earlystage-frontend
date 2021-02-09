@@ -8,12 +8,10 @@ import * as types from './profileActionTypes';
  * @param {String} userProfileObject.email
  * @param {String} userProfileObject.name
  */
-export const setUserProfile = ({ _id, email, name }) => ({
+export const setUserProfile = (userObject) => ({
   type: types.SET_USER_PROFILE,
   payload: {
-    _id,
-    email,
-    name
+    ...userObject
   }
 });
 
