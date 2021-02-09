@@ -1,5 +1,4 @@
 // Redux/persist dependencies
-// import { useStore } from '../redux/store'
 import { useStore } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import App from 'next/app';
@@ -18,5 +17,10 @@ function MyApp({ Component, pageProps }) {
     // </Provider>
   );
 }
+
+MyApp.getInitialProps = async ({ Component, ctx }) => {
+  const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
+  return { pageProps };
+};
 
 export default wrapper.withRedux(MyApp);
