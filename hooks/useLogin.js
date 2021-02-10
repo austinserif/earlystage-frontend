@@ -32,11 +32,13 @@ const useLogin = () => {
 
   const handleSubmit = async () => {
     try {
+      // signal loading spinner
       dispatch(setIsLoading());
 
+      // destructure values for request
       const { email, password } = values;
-      console.log(email, password);
 
+      // build and send request
       const response = await axios({
         method: 'POST',
         url: `${SERVER_URL}/login`,
@@ -46,14 +48,16 @@ const useLogin = () => {
         }
       });
 
-      console.log(response.data);
-
+      // destructure response data
       const { token, isVerified } = response.data;
 
+      // set cookies
       cookieCutter.set('token', token);
       cookieCutter.set('email', email);
       cookieCutter.set('isVerified', isVerified);
-      router.push('/dashboard');
+
+      // route user to logged in state
+      router.push('/dashboard'); // does this trigger `getServerSideProps` on /dashboard
     } catch (err) {
       dispatch(setAuthErrorMsg());
     } finally {
