@@ -1,40 +1,20 @@
 import React from 'react';
-import { Card, Icon, Button, Loader, Placeholder } from 'semantic-ui-react';
-import useSWR from 'swr';
-import cookieCutter from 'cookie-cutter';
-import { connect, useSelector } from 'react-redux';
+import { List, Item } from 'semantic-ui-react';
+import veronika from '../../assets/img/veronika.jpg';
+import Link from 'next/link';
 
-const WorkspaceItem = ({ workspaceId }) => {
-  const workspace = useSelector((s) => s.user.workspaces.workspaces[workspaceId]);
-
-  if (!workspace || workspace.isLoading) {
-    return (
-      <Card>
-        <Placeholder.Header image>
-          <Placeholder.Line />
-          <Placeholder.Line />
-        </Placeholder.Header>
-      </Card>
-    );
-  }
-
+const WorkspaceItem = ({ workspaceName, workspaceId, workspaceComponentsCount }) => {
   return (
-    <Card
-      header={workspace.entity.name}
-      meta={workspace.entity.domain}
-      extra={
-        <>
-          <a>
-            <Icon name="tasks" />
-            {workspace.components.length} Components
-          </a>
-          <Button floated="right" color="blue">
-            Edit
-          </Button>
-        </>
-      }
-    />
+    <Link href={`/workspace/${workspaceId}`}>
+      <List.Item id={workspaceId} style={{ padding: '1em 0 1em 0' }}>
+        <Item.Image src={veronika} />
+        <Item.Content
+          verticalAlign="top"
+          header={workspaceName}
+          meta={`${workspaceComponentsCount} Components`}
+        />
+      </List.Item>
+    </Link>
   );
 };
-
-export default connect((state) => state.user.workspaces.workspaces)(WorkspaceItem);
+export default React.memo(WorkspaceItem);
