@@ -1,5 +1,5 @@
-import { Container } from 'semantic-ui-react';
-import { connect } from 'react-redux';
+import { Container, Table, Menu, Icon, Label, Button, Progress } from 'semantic-ui-react';
+import { connect, useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import DashboardNavbar from '../../sections/DashboardNavbar';
 import DashboardHeader from '../../components/DashboardHeading';
@@ -7,49 +7,75 @@ import WorkspaceList from '../../sections/WorkspaceList';
 import EmailVerification from '../../sections/EmailVerification';
 import {
   getWorkspacesFromIds,
-  loadAndSetWorkspace
+  loadAndSetWorkspace,
+  setWorkspaces
 } from '../../redux/user/workspaces/workspacesActionCreators';
 import Promise from 'es6-promise';
 import axios from 'axios';
 import useSWR from 'swr';
 import cookieCutter from 'cookie-cutter';
 import { useRouter, Router } from 'next/dist/client/router';
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState, useEffect } from 'react';
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
-const fetcher = (urlArray) =>
-  Promise.all(urlArray.map((v) => axios.get(v).then((res) => res.data)));
+const Dashboard = (props) => {
+  console.log(props);
+  const { isVerified } = props.cookies;
+  const [isLoading, setIsLoading] = useState(true);
+  const [percent, setPercent] = useState(0);
+  const [dispatchComplete, setDispatchComplete] = useState(false);
 
-const Dashboard = ({ cookies, userData }) => {
-  const { isVerified } = cookies;
+  useEffect(() => {
+    if (!dispatchComplete) {
+      props.dispatch(setWorkspaces(props.userData.allWorkspaceData));
+      setDispatchComplete(true);
+    }
+
+    if (isLoading) {
+      const intervalId = setInterval(() => {
+        if (percent < 100) {
+          setPercent(percent + 1);
+        } else {
+          setIsLoading(false);
+        }
+      }, 30);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [percent]); // this will only execute once
 
   return (
     <>
       <Container>
         <DashboardNavbar />
       </Container>
+      <Container text style={{ paddingTop: '7em' }}>
+        {isVerified ? (
+          isLoading ? (
+            <Progress percent={percent} indicating style={{ marginTop: '50%' }} />
+          ) : (
+            <>
+              {/* Dashboard Header contains title text and a button for creating new workspaces */}
+              <DashboardHeader title="Dashboard" />
 
-      {isVerified ? (
-        <Container text style={{ marginTop: '7em' }}>
-          {/* Dashboard Header contains title text and a button for creating new workspaces */}
-          <DashboardHeader title="Dashboard" />
-
-          {/* If the user had any workspaces, they will be displayed here */}
-          <WorkspaceList workspaceArray={userData.workspaces} />
-        </Container>
-      ) : (
-        <Container text style={{ marginTop: '7em' }}>
+              {/* If the user had any workspaces, they will be displayed here */}
+              <WorkspaceList workspaceArray={Object.values(props.workspaces.workspaces) || []} />
+            </>
+          )
+        ) : (
           <EmailVerification />
-        </Container>
-      )}
+        )}
+      </Container>
     </>
   );
 };
 
 export const getServerSideProps = async (ctx) => {
   try {
-    const cookies = ctx.req ? ctx.req.cookies : {};
+    // get cookies object
+    const { cookies } = ctx.req;
 
+    // get basic user data --> {_id, account, questions, workspaces, metadata}
     const user = await axios({
       method: 'GET',
       url: `${SERVER_URL}/users/${cookies.email}?_token=${cookies.token}`
@@ -58,7 +84,7 @@ export const getServerSideProps = async (ctx) => {
     return {
       props: {
         userData: user.data,
-        cookies: ctx.req.cookies
+        cookies
       }
     };
   } catch (err) {
@@ -69,4 +95,4 @@ export const getServerSideProps = async (ctx) => {
   }
 };
 
-export default connect((state) => state)(Dashboard);
+export default connect((state) => state.user)(Dashboard);
