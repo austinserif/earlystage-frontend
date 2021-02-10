@@ -70,22 +70,24 @@ export const loadAndSetWorkspace = (email, token, workspaceId) => async (dispatc
  */
 export const getWorkspacesFromIds = (email, token, workspaceIdArray = []) => async (dispatch) => {
   try {
+    if (workspaceIdArray.length === 0) return;
+
     // initiate loading
     dispatch(setIsLoading());
 
+    // push series of new requests into requestArray
     const requestArray = workspaceIdArray.map((v) => {
-      return `${SERVER_URL}/users/${email}/workspaces/${v}?_token=${token}`;
+      return axios.get(`${SERVER_URL}/users/${email}/workspaces/${v}?_token=${token}`);
     });
 
-    requestArray.forEach((v) => console.log(v));
-
-    // request data for all workspace ids
+    // await all promises in the request array to resolve before proceeding
     const responses = await Promise.all(requestArray);
 
     // map response data array into a workspaces object
     const workspaces = {};
 
     responses.forEach((v, i) => {
+      console.log(v.data);
       // console.log(v.data.entity);
       const { data } = v; // destructure data object from response
 
@@ -97,6 +99,7 @@ export const getWorkspacesFromIds = (email, token, workspaceIdArray = []) => asy
     // dispatch workspace object
     dispatch(setWorkspaces(workspaces));
   } catch (err) {
+    console.log('an error occured inside getWorkspacesFromIds');
     console.log(err);
   } finally {
     dispatch(clearIsLoading());
