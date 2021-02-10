@@ -1,35 +1,27 @@
 import React from 'react';
 import WorkspaceItem from '../components/WorkspaceItem';
-import { Card } from 'semantic-ui-react';
-import { connect } from 'react-redux';
+import { List } from 'semantic-ui-react';
 
 /**
  * WorkspaceList takes an array of workspaceIds as an argument,
  * and maps each item into a component to initiate data loading.
- * @param {*} param0
+ * @param {Object} props
+ * @param {Object[]} props.workspaceArray
  */
-const WorkspaceList = ({ workspaceArray, workspaces }) => {
-  // map the input prop `workspaceArray` into an array of JSX `WorkspaceItem` compaonents
-  const components = workspaces.workspaces.map((item) => {
-    const [k, v] = item;
-    return (
-      <WorkspaceItem
-        key={k}
-        workspaceName={v.entity.name}
-      />
-    );
-  });
-
-  if (!workspaceArray || !workspaceArray.length) {
-    return <div>To add a workspace, select New Workspace</div>;
-  }
-
-  if (workspaces.isLoading) {
-    return (<div>...loading</div>)
-  }
-
-  // render list of components if any exist
-  return <Card.Group>{components}</Card.Group>;
+const WorkspaceList = ({ workspaceArray }) => {
+  console.log(`workspace array: ${JSON.stringify(workspaceArray)}`);
+  return (
+    <List verticalAlign="middle">
+      {workspaceArray.map((v) => (
+        <WorkspaceItem
+          key={v._id}
+          workspaceName={v.entity.name}
+          workspaceComponentsCount={v.components.length}
+          workspaceId={v._id}
+        />
+      ))}
+    </List>
+  );
 };
 
-export default connect((state) => state.user.workspaces)(WorkspaceList);
+export default React.memo(WorkspaceList);
