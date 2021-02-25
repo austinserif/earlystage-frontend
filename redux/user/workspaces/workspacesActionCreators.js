@@ -1,6 +1,8 @@
 import * as types from './workspacesActionTypes';
+import { clearProcessingInitialLoad } from '../../cache/cacheActionCreator';
 import axios from 'axios';
 import { Promise } from 'es6-promise';
+import mapData from '../../../utils/mapData';
 
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
@@ -11,7 +13,72 @@ const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 export const setWorkspaces = (workspaces) => ({
   type: types.SET_WORKSPACES,
   payload: {
-    workspaces
+    ...workspaces
+  }
+});
+
+/**
+ * Takes a workspaceId and an object containing componets and overwrites/
+ * sets the property `fullComponentData` into that workspaces state.
+ * Note that the workspace should have a corresponding `components` array
+ * that contains just the ids of its components.
+ *
+ * @param {String} workspaceId
+ * @param {Object} components
+ */
+const updateWorkspaceComponents = (workspaceId, components) => {
+  return {
+    type: types.UPDATE_WORKSPACE_COMPONENTS,
+    payload: {
+      workspaceId,
+      components
+    }
+  };
+};
+
+const getComponentData = (workspaceId) => async (dispatch) => {
+  try {
+    const token = document.cookie.token;
+    const email = document.cookie.email;
+    const response = await axios({
+      method: 'GET',
+      url: `${SERVER_URL}/users/${email}/workspaces/${workspaceId}/components?_token=${token}`
+    });
+
+    const mappedData = mapData(response.data);
+    console.log(mappedData);
+    dispatch(updateWorkspaceComponents(workspaceId, mappedData));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+/**
+ * Takes a workspaces object containing a set of key-value pairs where
+ * the key is a workspaceId and the value is the related metadata.
+ * @param {Objet} workspaces
+ */
+export const loadAllWorkspaceComponents = (workspaces) => async (dispatch) => {
+  try {
+    const workspaceIds = Object.keys(workspaces); // gets an array of workspaceIds
+
+    // sets workspaces into state
+    dispatch(setWorkspaces(workspaces));
+
+    // dispatches an action creator for each workspace id in the array
+    workspaceIds.forEach((id) => {
+      dispatch(getComponentData(id));
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const setOneWorkspace = (key, value) => ({
+  type: types.SET_ONE_WORKSPACE,
+  payload: {
+    key,
+    value
   }
 });
 
@@ -106,6 +173,33 @@ export const getWorkspacesFromIds = (email, token, workspaceIdArray = []) => asy
   }
 };
 
+/**
+ * Takes user credentials and workspaceId and loads all components related to a particular workspaceId
+ *
+ * @param {Object} credentials credentials object containing email and token properties
+ * @param {String} workspaceId string identifying a unique workspace
+ */
+export const loadAndCacheAllComponents = ({ email, token }, workspaceId, isLast = false) => async (
+  dispatch
+) => {
+  try {
+    // make a request to get all the components for a given workspace
+    const response = await axios({
+      method: 'GET',
+      baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
+      url: `users/${email}/workspaces/${workspaceId}/components?_token=${token}`
+    });
+
+    const mappedData = mapData(response.data); // maps data from an array to object with key entry by `_id` value
+
+    dispatch(updateWorkspaceComponents(workspaceId, mappedData)); // dispatches action to update a given workspace in state to reflect changes to its components
+  } catch (err) {
+    console.log(err);
+  } finally {
+    if (isLast) dispatch(clearProcessingInitialLoad());
+  }
+};
+
 export const createNewWorkspace = (name, domain, credentials) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
@@ -122,13 +216,9 @@ export const createNewWorkspace = (name, domain, credentials) => async (dispatch
       }
     });
 
-    console.log(response.data);
-
-    const body = response.data; // get data for storage in state
-
-    delete body._id; // delete _id because it will be the key
-
-    dispatch(setWorkspaces({ [response.data._id]: body })); // dispatch key-val pair where _id is the key
+    const key = response.data._id;
+    const value = response.data;
+    dispatch(setOneWorkspace(key, value)); // dispatch key-val pair where _id is the key
   } catch (err) {
     dispatch(
       setNewWorkspaceErrMsg(err.message || 'There was an error creating your new workspace')
