@@ -3,8 +3,6 @@ import { Modal, Button, Input, Form, Message } from 'semantic-ui-react';
 import useLogin from '../hooks/useLogin';
 import { emailRegex } from '../utils/regex';
 import { useSelector } from 'react-redux';
-import { useRouter } from 'next/dist/client/router';
-import cookies from 'cookie-cutter';
 
 /**
  * `LoginModal` is renders a Login button that opens
@@ -16,14 +14,7 @@ import cookies from 'cookie-cutter';
  * @inver
  */
 const LoginModal = ({ open, setOpen, inverted }) => {
-  const { token, isLoading, authErrorMessage } = useSelector((s) => s.auth);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (token) {
-      router.push('/dashboard');
-    }
-  });
+  const { isLoading, authErrorMessage } = useSelector((s) => s.auth);
 
   const [values, handleChange, handleReset, handleSubmit] = useLogin();
   return (
@@ -78,7 +69,7 @@ const LoginModal = ({ open, setOpen, inverted }) => {
           content="Submit"
           labelPosition="right"
           icon="checkmark"
-          onClick={handleSubmit}
+          onClick={async () => await handleSubmit()}
           positive
         />
       </Modal.Actions>
