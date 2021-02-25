@@ -34,7 +34,14 @@ const useInitialLoad = () => {
     dispatch(setWorkspaces(mappedWorkspaces));
 
     // get current components data for workspaces
-    const { data: componentsData, error: componentsError } = useSWR(userData ? [`/users/${cookies.email}/workspaces/${userData.workspaces[0]}/components?_token=${cookies.token}`], fetcher);
+    const { data: componentsData, error: componentsError } = useSWR(
+      !isLoadingWorkspaces && !isLoadingUser
+        ? [
+            `/users/${cookies.email}/workspaces/${userData.workspaces[0]}/components?_token=${cookies.token}`
+          ]
+        : null,
+      fetcher
+    );
     const isLoadingComponents = !componentsData && !componentsError;
 
     return {
