@@ -57,7 +57,7 @@ const useLogin = () => {
       cookieCutter.set('isVerified', isVerified);
 
       // route user to logged in state
-      router.push('/dashboard'); // does this trigger `getServerSideProps` on /dashboard
+      await router.push('/dash'); // does this trigger `getServerSideProps` on /dashboard
     } catch (err) {
       dispatch(setAuthErrorMsg());
     } finally {
