@@ -22,7 +22,8 @@ const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
  */
 const Home = () => {
   const mobile = false;
-
+  const data = useSelector((s) => s);
+  console.log(data);
   return (
     <>
       <Navbar inverted={false} />
@@ -73,7 +74,7 @@ export const getServerSideProps = async (ctx) => {
 
   // if all the necessary tokens are found in cookies, redirect the requesting client to their dashboard
   if (token && isVerified && email && ctx.res) {
-    ctx.res.writeHead(302, { Location: '/dashboard' });
+    ctx.res.writeHead(302, { Location: '/dash' });
     ctx.res.end();
     return { props: {} }; // return empty props object
   }
