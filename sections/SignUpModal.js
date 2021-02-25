@@ -1,21 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Button, Image, Header, Input, Form, Message } from 'semantic-ui-react';
+import React from 'react';
+import { Modal, Button, Input, Form, Message } from 'semantic-ui-react';
 import { emailRegex } from '../utils/regex';
 import useSignUp from '../hooks/useSignUp';
 import { useSelector } from 'react-redux';
-import { useRouter } from 'next/dist/client/router';
 
 const SignUpModal = ({ open, setOpen, inverted }) => {
   const [values, handleChange, handleReset, handleSubmit] = useSignUp();
 
-  const { token, isLoading, authErrorMessage } = useSelector((s) => s.auth);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (token) {
-      router.push('/dashboard');
-    }
-  });
+  const { isLoading, authErrorMessage } = useSelector((s) => s.auth);
 
   return (
     <Modal
