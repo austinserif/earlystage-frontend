@@ -2,9 +2,11 @@ import * as types from './authActionTypes';
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { setUserProfile, clearUserProfile } from '../user/profile/profileActionCreators';
+import { setUserProfile, clearUserProfile, loadAndCacheProfile } from '../user/profile/profileActionCreators';
 import { getWorkspacesFromIds, clearWorkspaces, loadAndSetWorkspace } from '../user/workspaces/workspacesActionCreators';
 import { getUserData } from '../../api/user';
+import { clearQuestionsCache } from '../user/questions/questionsActionCreators';
+import { clearHasCachedUser } from '../cache/cacheActionCreator';
 
 /**
  * Sets new authentication credentials and preferences into state. Called
@@ -195,4 +197,23 @@ export const attemptRegistration = (name, email, password) => async (dispatch) =
     // tell redux store that all requests are complete
     dispatch(clearIsLoading());
   }
+};
+
+export const initialLoad = ({ email, token }) => async (dispatch) => {
+  try {
+    // load the user
+    dispatch(loadAndCacheProfile({ email, token }));
+
+    // load the components
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const logoutAndClearCache = () => async (dispatch) => {
+  dispatch(clearHasCachedUser());
+  dispatch(clearUser());
+  dispatch(clearWorkspaces());
+  dispatch(clearUserProfile());
+  dispatch(clearQuestionsCache());
 };
