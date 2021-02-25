@@ -9,7 +9,6 @@ import { List } from 'semantic-ui-react';
  * @param {Object[]} props.workspaceArray
  */
 const WorkspaceList = ({ workspaceArray }) => {
-  console.log(`workspace array: ${JSON.stringify(workspaceArray)}`);
   return (
     <List verticalAlign="middle">
       {workspaceArray.map((v) => (
