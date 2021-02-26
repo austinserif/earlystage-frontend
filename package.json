@@ -8,8 +8,6 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "export": "next export",
-    "deploy": "npm run build && npm run export",
     "now-build": "npm run semantic:build && next build",
     "semantic:build": "cd .semantic && gulp build-css build-assets",
     "semantic:watch": "cd .semantic && npm run semantic:build && gulp watch",
