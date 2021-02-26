@@ -3,7 +3,8 @@ import { useStore } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import App from 'next/app';
 
-import '../.semantic/dist/semantic.min.css';
+// import '../.semantic/dist/semantic.min.css';
+import 'semantic-ui-css/semantic.min.css';
 
 import { wrapper } from '../redux/store';
 
