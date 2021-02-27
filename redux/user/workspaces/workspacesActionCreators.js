@@ -219,7 +219,12 @@ export const loadAndCacheAllComponents = ({ email, token }, workspaceId, isLast 
   }
 };
 
-export const createNewWorkspace = (name, domain, credentials) => async (dispatch) => {
+export const createNewWorkspace = (
+  name,
+  domain,
+  credentials,
+  optionalCallback = () => {}
+) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     // get credentials from obj
@@ -243,6 +248,7 @@ export const createNewWorkspace = (name, domain, credentials) => async (dispatch
     };
 
     dispatch(setOneWorkspace(key, value)); // dispatch key-val pair where _id is the key
+    optionalCallback();
   } catch (err) {
     dispatch(
       setNewWorkspaceErrMsg(err.message || 'There was an error creating your new workspace')
