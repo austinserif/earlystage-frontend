@@ -39,6 +39,27 @@ const workspacesReducer = (state = initialState, action) => {
         }
       };
 
+    case types.UPDATE_WORKSPACE_COMPONENT:
+      return {
+        ...state,
+        workspaces: {
+          ...state.workspaces,
+          [action.payload.workspaceId]: {
+            ...state.workspaces[action.payload.workspaceId],
+            fullComponentData: {
+              ...state.workspaces[action.paylaod.workspaceId].fullComponentData,
+              [action.payload.componentId]: {
+                ...state.workspaces[action.payload.workspaceId].fullComponentData[
+                  action.payload.componentId
+                ],
+                answer: action.payload.answer,
+                readiness: action.payload.readiness
+              }
+            }
+          }
+        }
+      };
+
     case types.SET_NEW_WORKSPACE_ERROR_MSG:
       return {
         ...state,
