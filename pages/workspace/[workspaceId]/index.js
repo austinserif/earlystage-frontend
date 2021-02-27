@@ -13,6 +13,7 @@ import EmailVerification from '../../../sections/EmailVerification';
 import ComponentList from '../../../sections/ComponentList';
 
 const Workspace = (props) => {
+  console.log(props);
   console.log(props.questions);
   const categories = Object.keys(props.questions.categories);
   const cookies = parseCookies('token', 'email', 'isVerified');
@@ -56,7 +57,7 @@ const Workspace = (props) => {
 
               {/* If the user had any workspaces, they will be displayed here */}
               <ComponentList
-                questionsObject={props.questions}
+                questionsObject={props.questions.categories}
                 componentArray={
                   Object.values(
                     props.workspaces.workspaces[router.query.workspaceId].fullComponentData
