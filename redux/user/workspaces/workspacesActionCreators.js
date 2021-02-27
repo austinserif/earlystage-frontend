@@ -248,12 +248,12 @@ export const createNewWorkspace = (
     };
 
     dispatch(setOneWorkspace(key, value)); // dispatch key-val pair where _id is the key
+    optionalCallback();
   } catch (err) {
     dispatch(
       setNewWorkspaceErrMsg(err.message || 'There was an error creating your new workspace')
     );
   } finally {
     dispatch(clearIsLoading());
-    optionalCallback();
   }
 };
