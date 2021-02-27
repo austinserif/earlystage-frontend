@@ -236,7 +236,12 @@ export const createNewWorkspace = (name, domain, credentials) => async (dispatch
     });
 
     const key = response.data._id;
-    const value = response.data;
+    const value = {
+      ...response.data,
+      fullComponentData: {} // temporary patch until added to backend
+      // without this code, error is thrown when a newly created workspace loads and tries to access the field
+    };
+
     dispatch(setOneWorkspace(key, value)); // dispatch key-val pair where _id is the key
   } catch (err) {
     dispatch(
