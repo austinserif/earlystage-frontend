@@ -10,7 +10,10 @@ const NewWorkspaceModal = ({ open, setOpen }) => {
   const { token, email } = cookies;
   console.log(token, email);
   const { isLoading, newWorkspaceErrMsg } = useSelector((s) => s.user.workspaces);
-  const [values, handleChange, handleReset, handleSubmit] = useNewWorkspace({ email, token });
+  const [values, handleChange, handleReset, handleSubmit] = useNewWorkspace(
+    { email, token },
+    setOpen
+  );
   return (
     <Modal
       closeOnEscape={false}
