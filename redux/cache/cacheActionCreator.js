@@ -7,6 +7,7 @@ import {
 import mapData from '../../utils/mapData';
 import { setUserProfile } from '../user/profile/profileActionCreators';
 import { setManyQuestions } from '../user/questions/questionsActionCreators';
+import mapCategories from '../../utils/mapCategories';
 
 export const setHasCachedUser = () => ({ type: types.SET_HAS_CACHED_USER });
 export const clearHasCachedUser = () => ({ type: types.CLEAR_HAS_CACHED_USER });
@@ -61,7 +62,8 @@ export const initialLoadingSequence = ({ email, token }) => async (dispatch) => 
     });
 
     if (!questionsResponse) throw new Error('GET /users/:userId returned an undefined value'); // throws an error if resource could not be loaded
-    const mappedQuestions = mapData(questionsResponse.data);
+    const mappedQuestions = mapCategories(questionsResponse.data);
+    console.log('-----mapping questions during initial load------');
     dispatch(setManyQuestions(mappedQuestions));
     dispatch(updateInitialLoadProcessingStage('Questions Loaded...'));
 
