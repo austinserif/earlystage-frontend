@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewWorkspace } from '../redux/user/workspaces/workspacesActionCreators';
 
-const useNewWorkspace = (credentials) => {
+const useNewWorkspace = (credentials, handleModal) => {
   // set initial values as empty strings
   const initial = {
     name: '',
@@ -24,8 +24,13 @@ const useNewWorkspace = (credentials) => {
     // name and domain of new company workspace to be created
     const { name, domain } = values;
 
-    // dispatch credentials, name and domain
-    dispatch(createNewWorkspace(name, domain, credentials));
+    // dispatch credentials, name and domain, and an optional callback function
+    dispatch(
+      createNewWorkspace(name, domain, credentials, () => {
+        handleReset(); // resets form fields to initial blank state
+        handleModal(() => false); // closes modal
+      })
+    );
   };
 
   const handleReset = () => {
