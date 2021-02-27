@@ -111,6 +111,25 @@ const setNewWorkspaceErrMsg = (message) => {
   };
 };
 
+/**
+ *
+ * @param {String} answer Updated answer
+ * @param {Boolean} readiness Updated readiness
+ * @param {String} workspaceId workspaceId string of target component
+ * @param {String} componentId componentId string of target component/answer
+ */
+export const updateComponent = (answer, readiness, workspaceId, componentId) => {
+  return {
+    type: types.UPDATE_WORKSPACE_COMPONENTS,
+    payload: {
+      answer,
+      readiness,
+      workspaceId,
+      componentId
+    }
+  };
+};
+
 /** Sets new workspace error message state back to null */
 export const clearNewWorkspaceErrMsg = () => ({ type: types.CLEAR_NEW_WORKSPACE_ERROR_MSG });
 
