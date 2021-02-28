@@ -95,7 +95,6 @@ const QuestionComponent = ({ _id, question, questionCategory, workspaceId, answe
                 content: 'Save',
                 disabled: !unsavedChanges
               }}
-              // actionPosition="right"
               error={error.hasError}
             />
           </Form>
