@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Button, Icon, Header, Loader, Segment, Grid, Image } from 'semantic-ui-react';
 import Navbar from '../sections/Navbar';
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState, useEffect } from 'react';
 import { useRouter } from 'next/dist/client/router';
 import { useSelector } from 'react-redux';
 import HomepageLayout from '../sections/HomePageLayoutFiller';
@@ -11,6 +11,7 @@ import notesIllustration from '../assets/img/notes.svg';
 import axios from 'axios';
 import { setUserProfile } from '../redux/user/profile/profileActionCreators';
 import Cookies from 'cookie-cutter';
+import parseCookies from '../utils/parseCookies';
 
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
@@ -21,6 +22,18 @@ const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
  * navigate to the authenticated home page.
  */
 const Home = () => {
+  // instatiates router object
+  const router = useRouter();
+
+  // pushes user to dashboard if already logged in
+  useEffect(() => {
+    const cookies = parseCookies('token', 'email', 'isVerified');
+    const { token, isVerified, email } = cookies;
+    if (token && isVerified && email) {
+      router.push('/dash');
+    }
+  }, []);
+
   const mobile = false;
   const data = useSelector((s) => s);
   console.log(data);
@@ -68,22 +81,30 @@ const Home = () => {
   );
 };
 
-export const getServerSideProps = async (ctx) => {
-  // destructure credential related cookies
-  const { token, isVerified, email } = ctx.req.cookies;
+// export const getServerSideProps = async (ctx) => {
+//   try {
+//     // destructure credential related cookies
+//     const { token, isVerified, email } = ctx.req.cookies;
 
-  // if all the necessary tokens are found in cookies, redirect the requesting client to their dashboard
-  if (token && isVerified && email && ctx.res) {
-    ctx.res.writeHead(302, { Location: '/dash' });
-    ctx.res.end();
-    return { props: {} }; // return empty props object
-  }
+//     // if all the necessary tokens are found in cookies, redirect the requesting client to their dashboard
+//     if (token && isVerified && email && ctx.res) {
+//       ctx.res.writeHead(302, { Location: '/dash' });
+//       ctx.res.end();
+//       return { props: {} }; // return empty props object
+//     }
 
-  return {
-    props: {
-      cookies: ctx.req.cookies
-    }
-  };
-};
+//     return {
+//       props: {
+//         cookies: ctx.req.cookies
+//       }
+//     };
+//   } catch (err) {
+//     return {
+//       props: {
+//         cookies: {}
+//       }
+//     };
+//   }
+// };
 
 export default Home;
