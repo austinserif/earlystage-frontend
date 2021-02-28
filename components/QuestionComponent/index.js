@@ -83,8 +83,8 @@ const QuestionComponent = ({ _id, question, questionCategory, workspaceId, answe
         <Card.Meta>{questionCategory || 'No Category'}</Card.Meta>
         <Card.Description>
           <Form loading={isLoading}>
-            <Form.Field
-              control={Input}
+            <Input
+              fluid
               onChange={handleChange}
               value={currentAnswer}
               action={{
@@ -95,9 +95,6 @@ const QuestionComponent = ({ _id, question, questionCategory, workspaceId, answe
                 content: 'Save',
                 disabled: !unsavedChanges
               }}
-              actionPosition="right"
-              placeholder="Search..."
-              defaultValue="52.03"
               error={error.hasError}
             />
           </Form>
