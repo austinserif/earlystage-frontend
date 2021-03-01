@@ -87,36 +87,4 @@ const Workspace = (props) => {
   );
 };
 
-// export const getServerSideProps = async (ctx) => {
-//   try {
-//     const { workspaceId } = ctx.params; // destructures workspaceId from url params object
-//     const { cookies } = ctx.req; // destructures cookies object from the req object
-
-//     // requests components from the server
-//     const response = await axios({
-//       method: 'GET',
-//       url: `${SERVER_URL}/users/${cookies.email}/workspaces/${workspaceId}/components?_token=${cookies.token}`
-//     });
-
-//     const mappedData = mapData(response.data);
-
-//     return {
-//       props: {
-//         mappedData,
-//         workspaceId,
-//         cookies
-//       }
-//     };
-//   } catch (err) {
-//     console.error(err);
-//     ctx.res.writeHead(302, { Location: '/' });
-//     ctx.res.end();
-//     return {
-//       props: {
-//         mappedData: 'there was an error'
-//       }
-//     };
-//   }
-// };
-
 export default connect((state) => state.user)(Workspace);
