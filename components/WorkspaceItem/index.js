@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { List, Item } from 'semantic-ui-react';
+import { List, Item, Card } from 'semantic-ui-react';
 import veronika from '../../assets/img/veronika.jpg';
 import Link from 'next/link';
 import WorkspacePortal from '../../sections/WorkspacePortal';
@@ -8,23 +8,20 @@ const WorkspaceItem = ({ workspaceName, workspaceId, workspaceComponentsCount })
   const [selected, setSelected] = useState(false);
   return (
     <Link href={`/workspace/${workspaceId}`}>
-      <List.Item
+      <Card
+        fluid
         id={workspaceId}
         style={{
-          padding: '1em 1em 1em 1em',
-          backgroundColor: selected ? '#EEEEEE' : 'transparent',
-          cursor: 'pointer'
+          padding: '0.5em 0.5em 0.5em 0.5em',
+          backgroundColor: selected ? '#EEEEEE' : 'transparent'
         }}
         onMouseEnter={() => setSelected(true)}
         onMouseLeave={() => setSelected(false)}>
-        <Item.Image src={veronika} />
-        <Item.Content
-          verticalAlign="top"
-          header={workspaceName}
-          meta={`${workspaceComponentsCount} Components`}
-        />
-        {/* <WorkspacePortal workspaceName={workspaceName} workspaceId={workspaceId} /> */}
-      </List.Item>
+        <Card.Content>
+          <Card.Header>{workspaceName}</Card.Header>
+          <Card.Meta>{workspaceComponentsCount} Components</Card.Meta>
+        </Card.Content>
+      </Card>
     </Link>
   );
 };
