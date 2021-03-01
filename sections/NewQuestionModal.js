@@ -13,7 +13,7 @@ import {
 import useNewWorkspace from '../hooks/useNewWorkspace';
 import { useSelector, connect } from 'react-redux';
 import parseCookies from '../utils/parseCookies';
-import useNewQuestion from '../components/NewQuestionForm/useNewQuestion';
+import useNewQuestion from '../hooks/useNewQuestion';
 
 const NewQuestionModal = (props) => {
   const cookies = parseCookies('token', 'email');
@@ -23,7 +23,7 @@ const NewQuestionModal = (props) => {
     category,
     categories,
     { handleChangeInput, handleChangeSelect, handleSubmit, handleReset }
-  ] = useNewQuestion({ email, token });
+  ] = useNewQuestion({ email, token }, props.setOpen);
   return (
     <Modal
       closeOnEscape={false}
