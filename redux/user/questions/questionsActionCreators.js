@@ -71,9 +71,13 @@ const clearIsLoadingNewQuestion = () => ({ type: types.CLEAR_IS_LOADING_NEW_QUES
  * @param {*} answerType
  * @param {Object} credentials
  */
-export const newQuestion = (category, question, answerType, { email, token }) => async (
-  dispatch
-) => {
+export const newQuestion = (
+  category,
+  question,
+  answerType,
+  { email, token },
+  optionalCallback = () => {}
+) => async (dispatch) => {
   try {
     dispatch(setIsLoadingNewQuestion()); // set loading status on
 
@@ -88,10 +92,15 @@ export const newQuestion = (category, question, answerType, { email, token }) =>
       }
     });
 
-    const { _id } = response.data; // islolates _id prop from response
+    // isolates _id prop from response
+    const { _id } = response.data;
 
     // if request is successful, this dispatch will be allowed to execute
     dispatch(setOneQuestion(_id, response.data, category));
+
+    // if we've made it this far, the operation is deemed successful, so we can trigger our optional callback function
+    // if one was not defined, then the execution will be benign
+    optionalCallback();
   } catch (err) {
     dispatch(setNewQuestionError(err.message)); // set error message into state if thrown
   } finally {
