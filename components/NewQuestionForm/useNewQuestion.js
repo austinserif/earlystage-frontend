@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { newQuestion } from '../../redux/user/questions/questionsActionCreators';
 
-const useNewQuestion = ({ email, token }) => {
+const useNewQuestion = ({ email, token }, handleModal) => {
   const dispatch = useDispatch();
 
   // hard coded categories (for now)
@@ -28,7 +28,14 @@ const useNewQuestion = ({ email, token }) => {
 
   const handleSubmit = () => {
     const answerType = null; // this is set to null until feature implemented
-    dispatch(newQuestion(category, question, answerType, { email, token }));
+
+    // dispatch category, question, answerType, credentials, and an optional callback function
+    dispatch(
+      newQuestion(category, question, answerType, { email, token }, () => {
+        handleReset(); // resets form fields to initial blank state
+        handleModal(() => false); // closes modal
+      })
+    );
   };
 
   const handleReset = () => {
