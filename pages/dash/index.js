@@ -3,21 +3,24 @@ import DashboardNavbar from '../../sections/DashboardNavbar';
 import WorkspaceList from '../../sections/WorkspaceList';
 import DashboardHeader from '../../components/DashboardHeading';
 import { useEffect } from 'react';
-import { initialLoadingSequence, clearProcessingInitialLoad } from '../../redux/cache/cacheActionCreator';
+import {
+  initialLoadingSequence,
+  clearProcessingInitialLoad
+} from '../../redux/cache/cacheActionCreator';
 import cookieCutter from 'cookie-cutter'; // lightweight package for accessing cookies on client and server
 import { useRouter } from 'next/dist/client/router';
 import { connect } from 'react-redux';
+import parseCookies from '../../utils/parseCookies';
 
 const Dash = (props) => {
   const router = useRouter();
   console.log(props);
 
+  const cookies = parseCookies('token', 'email', 'isVerified', 'logoutUser');
+  const { token, email, isVerified, logoutUser } = cookies;
+
   useEffect(() => {
     // check if the user is authenticated
-    const token = cookieCutter.get('token');
-    const email = cookieCutter.get('email');
-    const isVerified = cookieCutter.get('isVerified');
-    console.log(token, email, isVerified);
 
     if (!token || !email) {
       ['token', 'email', 'isVerified'].forEach((v) => {
@@ -27,14 +30,17 @@ const Dash = (props) => {
     }
 
     // if user is auth'd, check to see if the user is cached, if not initiate loading sequence
-    if (!props.cache.metadata.hasCachedUser) {
+    if (!props.cache.metadata.hasCachedUser && !logoutUser) {
       props.dispatch(initialLoadingSequence({ email, token }));
     } else {
       props.dispatch(clearProcessingInitialLoad());
     }
   }, []);
 
-  if (!props.cache.metadata.hasCachedUser || props.cache.metadata.processingInitialLoad) {
+  if (
+    (!props.cache.metadata.hasCachedUser || props.cache.metadata.processingInitialLoad) &&
+    !logoutUser
+  ) {
     return <Loader size="massive" active />;
   }
   return (
