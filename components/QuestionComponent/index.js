@@ -3,7 +3,10 @@ import axios from 'axios';
 import { Card, Form, Input } from 'semantic-ui-react';
 import parseCookies from '../../utils/parseCookies';
 import { useDispatch } from 'react-redux';
-import { updateComponent } from '../../redux/user/workspaces/workspacesActionCreators';
+import {
+  updateComponent,
+  updateComponentAnswer
+} from '../../redux/user/workspaces/workspacesActionCreators';
 
 const categories = {
   financials: 'Financials',
@@ -66,17 +69,15 @@ const QuestionComponent = ({
         baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
         url: `/users/${cookies.email}/workspaces/${workspaceId}/components/${_id}`,
         data: {
-          updates: [
-            { field: 'answer', value: currentAnswer },
-            { field: 'readiness', value: currentReadiness }
-          ]
+          updates: [{ field: 'answer', value: currentAnswer }]
         }
       });
 
       // if error is not thrown, assume that the changes were accepted
 
       // dispatch update to redux store
-      dispatch(updateComponent(currentAnswer, currentReadiness, workspaceId, _id));
+      dispatch(updateComponentAnswer(workspaceId, _id, currentAnswer));
+      // setIsLoading(() => false);
     } catch (err) {
       setError(() => ({ hasError: true, errorMessage: err.message }));
     } finally {
