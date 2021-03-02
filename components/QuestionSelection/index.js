@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 import { Tab, Pane, List, Segment, Button } from 'semantic-ui-react';
 import styled from 'styled-components';
+import QuestionItem from '../QuestionItem';
+import parseCookies from '../../utils/parseCookies';
 
 const DashContainer = styled.div`
   padding: 50px;
@@ -14,22 +16,16 @@ const ScrollableContainer = styled.div`
  * @param {Array} array
  * @param {Object} categories
  */
-const buildQuestionsList = (array, categories) => {
+const buildQuestionsList = (array, categories, workspaceId) => {
+  const cookies = parseCookies('token', 'email');
+  const { token, email } = cookies;
   const mappedToComponents = array.map((v) => (
-    <List.Item key={v._id}>
-      <List.Content floated="right">
-        <Button
-          onClick={() => {
-            console.log(categories[v.category][v._id]);
-          }}
-          color="yellow">
-          Add
-        </Button>
-      </List.Content>
-      <List.Content>
-        <List.Header>{v.question}</List.Header>
-      </List.Content>
-    </List.Item>
+    <QuestionItem
+      key={v._id}
+      credentials={{ token, email }}
+      details={categories[v.category][v._id]}
+      workspaceId={workspaceId}
+    />
   ));
   return mappedToComponents;
 };
@@ -42,6 +38,7 @@ const buildQuestionsList = (array, categories) => {
  * @param {Object} props
  */
 const QuestionSelection = (props) => {
+  console.log('Question Selection Props', props);
   const categories = [
     { key: 'financials', text: 'Financials', value: 'financials' },
     { key: 'corporateGovernance', text: 'Corporate Governance', value: 'corporateGovernance' },
@@ -49,58 +46,27 @@ const QuestionSelection = (props) => {
     { key: 'management', text: 'Management', value: 'management' },
     { key: 'other', text: 'Other', value: 'other' }
   ];
-  const panes = [
-    {
-      menuItem: 'Market',
-      render: () => (
-        <Tab.Pane>
-          <ScrollableContainer>
-            <List relaxed divided verticalAlign="middle">
-              {buildQuestionsList(Object.values(props.categories.market), props.categories)}
-            </List>            
-          </ScrollableContainer>
-        </Tab.Pane>
-      )
-    },
-    {
-      menuItem: 'Financials',
-      render: () => (
-        <Tab.Pane>
-          <List relaxed divided verticalAlign="middle">
-            {buildQuestionsList(Object.values(props.categories.financials), props.categories)}
-          </List>
-        </Tab.Pane>
-      )
-    },
-    {
-      menuItem: 'Corporate Governance',
-      render: () => (
-        <List relaxed celled verticalAlign="middle">
-        {buildQuestionsList(Object.values(props.categories.corporateGovernance), props.categories)}
-        </List>
-      )
-    },
-    {
-      menuItem: 'Management',
-      render: () => (
-        <Tab.Pane>
-          <List relaxed celled verticalAlign="middle">
-            {buildQuestionsList(Object.values(props.categories.management), props.categories)}
-          </List>
-        </Tab.Pane>
-      )
-    },
-    {
-      menuItem: 'Other',
-      render: () => (
-        <Tab.Pane>
-          <List relaxed celled verticalAlign="middle">
-            {buildQuestionsList(Object.values(props.categories.other), props.categories)}
-          </List>
-        </Tab.Pane>
-      )
-    }
-  ];
+
+  const panes = categories.map((v) => {
+    return {
+      menuItem: v.text,
+      render: function render() {
+        return (
+          <Tab.Pane>
+            <ScrollableContainer>
+              <List relaxed divided verticalAlign="middle">
+                {buildQuestionsList(
+                  Object.values(props.categories[v.key]),
+                  props.categories,
+                  props.workspaceId
+                )}
+              </List>
+            </ScrollableContainer>
+          </Tab.Pane>
+        );
+      }
+    };
+  });
 
   return (
     <DashContainer>
