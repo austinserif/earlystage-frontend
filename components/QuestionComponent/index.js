@@ -5,13 +5,29 @@ import parseCookies from '../../utils/parseCookies';
 import { useDispatch } from 'react-redux';
 import { updateComponent } from '../../redux/user/workspaces/workspacesActionCreators';
 
+const categories = {
+  financials: 'Financials',
+  corporateGovernance: 'Corporate Governance',
+  market: 'Market',
+  management: 'Management',
+  other: 'Other'
+};
+
 /**
  *
  * @param {Object} props
  * @param {String} props.question question string
  * @param {Sring} props.questionCategory category string
  */
-const QuestionComponent = ({ _id, question, questionCategory, workspaceId, answer, readiness }) => {
+const QuestionComponent = ({
+  _id,
+  question,
+  questionCategory,
+  workspaceId,
+  answer,
+  readiness,
+  questionObject
+}) => {
   const dispatch = useDispatch(); // exposes access to store updates
 
   // returns an object with one key/value pair for each argument that corresponds a valid cookie
@@ -79,8 +95,10 @@ const QuestionComponent = ({ _id, question, questionCategory, workspaceId, answe
   return (
     <Card fluid>
       <Card.Content>
-        <Card.Header>{question || 'Question Not Found'}</Card.Header>
-        <Card.Meta>{questionCategory || 'No Category'}</Card.Meta>
+        <Card.Header>{questionObject ? questionObject.question : 'Question Not Found'}</Card.Header>
+        <Card.Meta>
+          {questionObject ? categories[questionObject.category] : 'No Category'}
+        </Card.Meta>
         <Card.Description>
           <Form loading={isLoading}>
             <Input
@@ -89,7 +107,7 @@ const QuestionComponent = ({ _id, question, questionCategory, workspaceId, answe
               value={currentAnswer}
               action={{
                 onClick: handleSubmit,
-                color: 'teal',
+                // color: 'teal',
                 labelPosition: 'right',
                 icon: 'save',
                 content: 'Save',
