@@ -1,15 +1,11 @@
 import { connect } from 'react-redux';
-import { Tab, Pane, List, Segment, Button } from 'semantic-ui-react';
+import { Tab, Pane, List, Segment, Button, Modal } from 'semantic-ui-react';
 import styled from 'styled-components';
 import QuestionItem from '../QuestionItem';
 import parseCookies from '../../utils/parseCookies';
 
 const DashContainer = styled.div`
   padding: 50px;
-`;
-
-const ScrollableContainer = styled.div`
-  overflow-y: scroll;
 `;
 
 /**
@@ -53,7 +49,7 @@ const QuestionSelection = (props) => {
       render: function render() {
         return (
           <Tab.Pane>
-            <ScrollableContainer>
+            <Modal.Content scrolling style={{ height: '200px' }}>
               <List relaxed divided verticalAlign="middle">
                 {buildQuestionsList(
                   Object.values(props.categories[v.key]),
@@ -61,7 +57,7 @@ const QuestionSelection = (props) => {
                   props.workspaceId
                 )}
               </List>
-            </ScrollableContainer>
+            </Modal.Content>
           </Tab.Pane>
         );
       }
