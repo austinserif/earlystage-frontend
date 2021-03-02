@@ -40,11 +40,12 @@ const DashboardNavbar = () => {
             <ButtonContainer>
               <Button
                 onClick={() => {
-                  dispatch(logoutAndClearCache());
                   cookieCutter.set('token', '', { expires: new Date(0) });
                   cookieCutter.set('email', '', { expires: new Date(0) });
                   cookieCutter.set('isVerified', '', { expires: new Date(0) });
-                  router.replace('/');
+                  cookieCutter.set('logoutUser', 'true');
+                  dispatch(logoutAndClearCache());
+                  router.push('/');
                 }}>
                 Log out
               </Button>

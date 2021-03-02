@@ -36,6 +36,15 @@ const updateWorkspaceComponents = (workspaceId, components) => {
   };
 };
 
+export const setWorkspaceComponent = (workspaceId, componentId, component) => ({
+  type: types.SET_WORKSPACE_COMPONENT,
+  payload: {
+    workspaceId,
+    componentId,
+    component
+  }
+});
+
 const getComponentData = (workspaceId) => async (dispatch) => {
   try {
     const token = document.cookie.token;
