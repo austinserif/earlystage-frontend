@@ -1,8 +1,16 @@
-import React from 'react';
-import WorkspaceItem from '../components/WorkspaceItem';
+import React, { useState, useEffect } from 'react';
 import { List } from 'semantic-ui-react';
 import QuestionComponent from '../components/QuestionComponent';
 import questionSearchFunction from '../utils/questionSearchFunction';
+import { connect } from 'react-redux';
+
+const categories = [
+  { key: 'financials', text: 'Financials', value: 'financials' },
+  { key: 'corporateGovernance', text: 'Corporate Governance', value: 'corporateGovernance' },
+  { key: 'market', text: 'Market', value: 'market' },
+  { key: 'management', text: 'Management', value: 'management' },
+  { key: 'other', text: 'Other', value: 'other' }
+];
 
 /**
  * WorkspaceList takes an array of workspaceIds as an argument,
@@ -10,22 +18,18 @@ import questionSearchFunction from '../utils/questionSearchFunction';
  * @param {Object} props
  * @param {Object[]} props.workspaceArray
  */
-const ComponentList = ({ componentArray, questionsObject }) => {
-  console.log(componentArray);
+const ComponentList = (props) => {
   return (
     <List verticalAlign="middle">
-      {componentArray.map((v) => {
-        const targetQuestionObject = questionSearchFunction(v.questionId, questionsObject); // questions object HERE refers to the object containing all categories and questions
-        console.log(v);
-        console.log(targetQuestionObject);
-        // console.log(targetQuestionObject);
+      {Object.values(props[props.workspaceId].fullComponentData).map((v) => {
+        const targetQuestionObject = questionSearchFunction(v.questionId, props.questionsObject); // questions object HERE refers to the object containing all categories and questions
         return (
           <QuestionComponent
             key={v._id}
             _id={v._id}
             answer={v.answer}
-            question={v.question}
-            // questionCategory={v.question.category}
+            questionObject={targetQuestionObject}
+            categories={categories}
           />
         );
       })}
@@ -33,4 +37,4 @@ const ComponentList = ({ componentArray, questionsObject }) => {
   );
 };
 
-export default React.memo(ComponentList);
+export default connect((state) => state.user.workspaces.workspaces)(ComponentList);
