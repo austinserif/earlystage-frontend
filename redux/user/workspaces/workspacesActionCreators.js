@@ -139,6 +139,15 @@ export const updateComponent = (answer, readiness, workspaceId, componentId) => 
   };
 };
 
+export const updateComponentAnswer = (workspaceId, componentId, answer) => ({
+  type: types.UPDATE_COMPONENT_ANSWER,
+  payload: {
+    workspaceId,
+    componentId,
+    answer
+  }
+});
+
 /** Sets new workspace error message state back to null */
 export const clearNewWorkspaceErrMsg = () => ({ type: types.CLEAR_NEW_WORKSPACE_ERROR_MSG });
 
