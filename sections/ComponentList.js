@@ -28,8 +28,10 @@ const ComponentList = (props) => {
             key={v._id}
             _id={v._id}
             answer={v.answer}
+            readiness={v.readiness}
             questionObject={targetQuestionObject}
             categories={categories}
+            workspaceId={props.workspaceId}
           />
         );
       })}
