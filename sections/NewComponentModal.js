@@ -1,16 +1,12 @@
 import React from 'react';
-import { Modal, Button, Input, Form, Message, Icon } from 'semantic-ui-react';
-import useNewWorkspace from '../hooks/useNewWorkspace';
-import { useSelector } from 'react-redux';
+import { Modal, Button, Icon } from 'semantic-ui-react';
 import cookieCutter from 'cookie-cutter';
 import QuestionSelection from '../components/QuestionSelection';
 
-const NewComponentModal = ({ open, setOpen }) => {
+const NewComponentModal = ({ open, setOpen, workspaceId }) => {
   const token = cookieCutter.get('token');
   const email = cookieCutter.get('email');
   console.log(token, email);
-  const { isLoading, newWorkspaceErrMsg } = useSelector((s) => s.user.workspaces);
-  const [values, handleChange, handleReset, handleSubmit] = useNewWorkspace({ email, token });
   return (
     <Modal
       closeOnEscape={false}
@@ -27,7 +23,7 @@ const NewComponentModal = ({ open, setOpen }) => {
           </Button.Content>
         </Button>
       }>
-      <QuestionSelection />
+      <QuestionSelection workspaceId={workspaceId} />
     </Modal>
   );
 };
