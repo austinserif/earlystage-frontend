@@ -1,19 +1,14 @@
-import styled from 'styled-components';
-import { Button, Icon, Header, Loader, Segment, Grid, Image } from 'semantic-ui-react';
+import { Button, Icon, Header, Segment, Grid, Image } from 'semantic-ui-react';
 import Navbar from '../sections/Navbar';
-import { useLayoutEffect, useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/dist/client/router';
 import { useSelector } from 'react-redux';
 import HomepageLayout from '../sections/HomePageLayoutFiller';
 import Footer from '../sections/Footer';
 
 import notesIllustration from '../assets/img/notes.svg';
-import axios from 'axios';
-import { setUserProfile } from '../redux/user/profile/profileActionCreators';
-import Cookies from 'cookie-cutter';
+import cookieCutter from 'cookie-cutter';
 import parseCookies from '../utils/parseCookies';
-
-const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
 /**
  * Renders the unauthenticated landing page at the root
@@ -27,10 +22,12 @@ const Home = () => {
 
   // pushes user to dashboard if already logged in
   useEffect(() => {
-    const cookies = parseCookies('token', 'email', 'isVerified');
-    const { token, isVerified, email } = cookies;
-    if (token && isVerified && email) {
+    const cookies = parseCookies('token', 'email', 'isVerified', 'logoutUser');
+    const { token, isVerified, email, logoutUser } = cookies;
+    if (token && isVerified && email && !logoutUser) {
       router.push('/dash');
+    } else if (logoutUser) {
+      cookieCutter.set('logoutUser', '', { expires: new Date(0) });
     }
   }, []);
 
@@ -80,31 +77,5 @@ const Home = () => {
     </>
   );
 };
-
-// export const getServerSideProps = async (ctx) => {
-//   try {
-//     // destructure credential related cookies
-//     const { token, isVerified, email } = ctx.req.cookies;
-
-//     // if all the necessary tokens are found in cookies, redirect the requesting client to their dashboard
-//     if (token && isVerified && email && ctx.res) {
-//       ctx.res.writeHead(302, { Location: '/dash' });
-//       ctx.res.end();
-//       return { props: {} }; // return empty props object
-//     }
-
-//     return {
-//       props: {
-//         cookies: ctx.req.cookies
-//       }
-//     };
-//   } catch (err) {
-//     return {
-//       props: {
-//         cookies: {}
-//       }
-//     };
-//   }
-// };
 
 export default Home;
