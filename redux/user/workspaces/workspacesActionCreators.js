@@ -1,10 +1,23 @@
 import * as types from './workspacesActionTypes';
 import { clearProcessingInitialLoad } from '../../cache/cacheActionCreator';
+import { deleteFromWorkspacesArray } from '../profile/profileActionCreators';
 import axios from 'axios';
 import { Promise } from 'es6-promise';
 import mapData from '../../../utils/mapData';
 
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
+
+const deleteWorkspace = (workspaceId) => ({
+  type: types.DELETE_WORKSPACE,
+  payload: {
+    workspaceId
+  }
+});
+
+export const deleteWorkspaceAndClearReferences = (workspaceId) => (dispatch) => {
+  dispatch(deleteWorkspace(workspaceId));
+  dispatch(deleteFromWorkspacesArray(workspaceId));
+};
 
 /**
  * Writes bulk workspace data into state
@@ -55,12 +68,19 @@ const getComponentData = (workspaceId) => async (dispatch) => {
     });
 
     const mappedData = mapData(response.data);
-    console.log(mappedData);
     dispatch(updateWorkspaceComponents(workspaceId, mappedData));
   } catch (err) {
     console.log(err);
   }
 };
+
+export const deleteComponent = (componentId, workspaceId) => ({
+  type: types.DELETE_WORKSPACE_COMPONENT,
+  payload: {
+    componentId,
+    workspaceId
+  }
+});
 
 /**
  * Takes a workspaces object containing a set of key-value pairs where
@@ -191,8 +211,6 @@ export const getWorkspacesFromIds = (email, token, workspaceIdArray = []) => asy
     const workspaces = {};
 
     responses.forEach((v, i) => {
-      console.log(v.data);
-      // console.log(v.data.entity);
       const { data } = v; // destructure data object from response
 
       // set key-value pair into workspaces object, where the
@@ -203,7 +221,6 @@ export const getWorkspacesFromIds = (email, token, workspaceIdArray = []) => asy
     // dispatch workspace object
     dispatch(setWorkspaces(workspaces));
   } catch (err) {
-    console.log('an error occured inside getWorkspacesFromIds');
     console.log(err);
   } finally {
     dispatch(clearIsLoading());
