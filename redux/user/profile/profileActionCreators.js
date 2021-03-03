@@ -27,6 +27,18 @@ export const clearUserProfile = () => ({
 });
 
 /**
+ * Removes a given workspaceId from the workspaces
+ * array in state
+ * @param {String} workspaceId
+ */
+export const deleteFromWorkspacesArray = (workspaceId) => ({
+  type: types.REMOVE_FROM_WORKSPACES_ARRAY,
+  payload: {
+    workspaceId
+  }
+});
+
+/**
  * Sets property hasLoadedUserObject to true, indicating the initially loaded arrays containing ids,
  * like `state.user.profile.questions` and `state.user.profile.workspaces`. These arrays allow pages
  * set placeholders while more specific data is loading.

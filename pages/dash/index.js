@@ -14,8 +14,6 @@ import parseCookies from '../../utils/parseCookies';
 
 const Dash = (props) => {
   const router = useRouter();
-  console.log(props);
-
   const cookies = parseCookies('token', 'email', 'isVerified', 'logoutUser');
   const { token, email, isVerified, logoutUser } = cookies;
 
@@ -53,7 +51,10 @@ const Dash = (props) => {
         <DashboardHeader title="Dashboard" />
 
         {/* If the user had any workspaces, they will be displayed here */}
-        <WorkspaceList workspaceArray={Object.values(props.user.workspaces.workspaces || [])} />
+        <WorkspaceList
+          cookies={cookies}
+          workspaceArray={Object.values(props.user.workspaces.workspaces || [])}
+        />
       </Container>
     </>
   );
