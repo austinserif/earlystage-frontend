@@ -65,9 +65,9 @@ const QuestionSelection = (props) => {
   });
 
   return (
-    <DashContainer>
-      <Tab menu={{ fluid: true, vertical: true }} menuPosition="left" panes={panes} />
-    </DashContainer>
+    <Modal.Header>
+      <Tab menu={{ pointing: true, secondary: true }} panes={panes} />
+    </Modal.Header>
   );
 };
 
