@@ -1,6 +1,6 @@
 import React from 'react';
 import WorkspaceItem from '../components/WorkspaceItem';
-import { List } from 'semantic-ui-react';
+import { List, Card } from 'semantic-ui-react';
 
 /**
  * WorkspaceList takes an array of workspaceIds as an argument,
@@ -8,18 +8,20 @@ import { List } from 'semantic-ui-react';
  * @param {Object} props
  * @param {Object[]} props.workspaceArray
  */
-const WorkspaceList = ({ workspaceArray }) => {
+const WorkspaceList = ({ workspaceArray, cookies }) => {
   return (
-    <List verticalAlign="middle">
+    <Card.Group>
       {workspaceArray.map((v) => (
         <WorkspaceItem
+          email={cookies.email}
+          token={cookies.token}
           key={v._id}
           workspaceName={v.entity.name}
           workspaceComponentsCount={v.components.length}
           workspaceId={v._id}
         />
       ))}
-    </List>
+    </Card.Group>
   );
 };
 
