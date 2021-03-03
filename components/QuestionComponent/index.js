@@ -5,8 +5,11 @@ import parseCookies from '../../utils/parseCookies';
 import { useDispatch } from 'react-redux';
 import {
   updateComponent,
-  updateComponentAnswer
+  updateComponentAnswer,
+  deleteComponent
 } from '../../redux/user/workspaces/workspacesActionCreators';
+import { deleteRequest } from '../../api/component';
+import DeleteButton from '../DeleteButton';
 
 const categories = {
   financials: 'Financials',
@@ -96,7 +99,17 @@ const QuestionComponent = ({
   return (
     <Card fluid>
       <Card.Content>
-        <Card.Header>{questionObject ? questionObject.question : 'Question Not Found'}</Card.Header>
+        <Card.Header>{questionObject ? questionObject.question : 'Question Not Found'}
+          <DeleteButton
+            floated="right"
+            deleteRequest={deleteRequest}
+            deleteRequestArgs={[{ email: cookies.email, token: cookies.token }, _id, workspaceId]}
+            actionCreator={deleteComponent}
+            actionCreatorArgs={[_id, workspaceId]}
+            resourceName="Component"
+          />
+        </Card.Header>
+
         <Card.Meta>
           {questionObject ? categories[questionObject.category] : 'No Category'}
         </Card.Meta>

@@ -140,14 +140,42 @@ const workspacesReducer = (state = initialState, action) => {
     /**
      * expects `payload: { _id: <String> }`
      */
-    case types.DELETE_WORKSPACE: {
-      const workspacesCopy = state.workspaces; // copy workspaces from state into new object
-      delete workspacesCopy[action.payload._id]; // delete key-value pair
+    case types.DELETE_WORKSPACE_COMPONENT: {
+      const componentsCopy = state.workspaces[action.payload.workspaceId].components.filter(
+        (v) => v !== action.payload.componentId
+      );
       return {
         ...state,
         workspaces: {
-          ...workspacesCopy
+          ...state.workspaces,
+          [action.payload.workspaceId]: {
+            ...state.workspaces[action.payload.workspaceId],
+            components: [...componentsCopy],
+            fullComponentData: Object.values({
+              ...state.workspaces[action.payload.workspaceId].fullComponentData
+            }).reduce((accum, curr) => {
+              if (curr._id !== action.payload.componentId) {
+                return { ...accum, [curr._id]: curr };
+              }
+              return accum;
+            }, {})
+          }
         }
+      };
+    }
+
+    /**
+     * expects `payload: { _id: <String> }`
+     */
+    case types.DELETE_WORKSPACE: {
+      return {
+        ...state,
+        workspaces: Object.values({ ...state.workspaces }).reduce((accum, curr) => {
+          if (curr._id !== action.payload.workspaceId) {
+            return { ...accum, [curr._id]: curr };
+          }
+          return accum;
+        }, {})
       };
     }
 
