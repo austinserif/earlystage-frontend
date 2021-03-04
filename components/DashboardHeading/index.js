@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Header, Button, Segment, Icon, Divider } from 'semantic-ui-react';
+import { Header, Divider } from 'semantic-ui-react';
 import NewWorkspaceModal from '../../sections/NewWorkspaceModal';
 import styled from 'styled-components';
 

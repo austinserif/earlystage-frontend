@@ -25,6 +25,12 @@ const useLogin = () => {
   // values
   const [values, setValues] = useState(initial);
 
+  /**
+   * Updates state to reflect update in
+   * value of controlled input.
+   *
+   * @param {Object} e event object
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setValues(() => ({ ...values, [name]: value }));
