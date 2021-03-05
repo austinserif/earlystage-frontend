@@ -1,7 +1,7 @@
 // Redux/persist dependencies
 import { useStore } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import App from 'next/app';
+// import App from 'next/app';
 
 // import '../.semantic/dist/semantic.min.css';
 import 'semantic-ui-css/semantic.min.css';

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { createNewWorkspace } from '../redux/user/workspaces/workspacesActionCreators';
 
 const useNewWorkspace = (credentials, handleModal) => {

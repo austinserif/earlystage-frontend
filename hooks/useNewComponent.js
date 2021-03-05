@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setWorkspaceComponent } from '../redux/user/workspaces/workspacesActionCreators';
+import { postRequest } from '../api/component';
 
 const useNewComponent = ({ email, token }, { workspaceId, questionId }) => {
   const dispatch = useDispatch();
@@ -13,17 +13,10 @@ const useNewComponent = ({ email, token }, { workspaceId, questionId }) => {
       // set loading spinner on
       setIsLoading(() => true);
 
-      // make request to server
-      const response = await axios({
-        method: 'POST',
-        baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
-        url: `/users/${email}/workspaces/${workspaceId}/components?_token=${token}`,
-        data: {
-          answer: '',
-          questionId
-        }
-      });
+      // creates a resource on the server
+      const response = await postRequest({ email, token }, workspaceId, questionId);
 
+      // update client to reflect sucessfully created resource
       dispatch(setWorkspaceComponent(workspaceId, response.data._id, response.data));
     } catch (err) {
       console.log(err);

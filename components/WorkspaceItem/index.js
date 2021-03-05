@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import { List, Item, Card, Button, Segment, Icon } from 'semantic-ui-react';
-import veronika from '../../assets/img/veronika.jpg';
+import React from 'react';
+import { Card, Button, Icon } from 'semantic-ui-react';
 import Link from 'next/link';
-import WorkspacePortal from '../../sections/WorkspacePortal';
 import DeleteButton from '../DeleteButton';
 import { deleteWorkspaceAndClearReferences } from '../../redux/user/workspaces/workspacesActionCreators';
 import { deleteRequest } from '../../api/workspace';

@@ -7,8 +7,6 @@ const QuestionItem = ({ details, credentials, workspaceId }) => {
     workspaceId: workspaceId
   };
 
-  console.log('Question Details', details, payload);
-
   const [isLoading, handleClick] = useNewComponent(credentials, payload);
   return (
     <List.Item>

@@ -1,12 +1,7 @@
 import { connect } from 'react-redux';
-import { Tab, Pane, List, Segment, Button, Modal } from 'semantic-ui-react';
-import styled from 'styled-components';
+import { Tab, List, Modal } from 'semantic-ui-react';
 import QuestionItem from '../QuestionItem';
 import parseCookies from '../../utils/parseCookies';
-
-const DashContainer = styled.div`
-  padding: 50px;
-`;
 
 /**
  * @param {Array} array
@@ -34,7 +29,6 @@ const buildQuestionsList = (array, categories, workspaceId) => {
  * @param {Object} props
  */
 const QuestionSelection = (props) => {
-  console.log('Question Selection Props', props);
   const categories = [
     { key: 'financials', text: 'Financials', value: 'financials' },
     { key: 'corporateGovernance', text: 'Corporate Governance', value: 'corporateGovernance' },
