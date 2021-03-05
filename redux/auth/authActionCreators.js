@@ -1,10 +1,12 @@
 import * as types from './authActionTypes';
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { setUserProfile, clearUserProfile, loadAndCacheProfile } from '../user/profile/profileActionCreators';
-import { getWorkspacesFromIds, clearWorkspaces, loadAndSetWorkspace } from '../user/workspaces/workspacesActionCreators';
-import { getUserData } from '../../api/user';
+import {
+  setUserProfile,
+  clearUserProfile,
+  loadAndCacheProfile
+} from '../user/profile/profileActionCreators';
+import { clearWorkspaces, loadAndSetWorkspace } from '../user/workspaces/workspacesActionCreators';
 import { clearQuestionsCache } from '../user/questions/questionsActionCreators';
 import { clearHasCachedUser } from '../cache/cacheActionCreator';
 
