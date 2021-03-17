@@ -11,7 +11,6 @@
  */
 const mapData = (data) => {
   try {
-    console.log(data, typeof data);
     // tests the input type
     if (!data) throw new Error('Input type must be Array');
 

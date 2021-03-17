@@ -75,7 +75,6 @@ const NewQuestionModal = (props) => {
         <Button
           color="blue"
           onClick={() => {
-            console.log({ question, category });
             handleSubmit();
           }}>
           Add Question
