@@ -8,7 +8,7 @@ import { Button, Container, Divider, Grid, Header, Image, Segment } from 'semant
 
 const HomepageLayout = () => (
   <Container>
-    <Segment style={{ padding: '0em' }} vertical>
+    {/* <Segment style={{ padding: '0em' }} vertical>
       <Grid celled="internally" columns="equal" stackable>
         <Grid.Row textAlign="center">
           <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
@@ -64,7 +64,7 @@ const HomepageLayout = () => (
           I&apos;m Still Quite Interested
         </Button>
       </Container>
-    </Segment>
+    </Segment> */}
   </Container>
 );
 
