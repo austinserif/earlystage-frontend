@@ -11,7 +11,8 @@ const ButtonContainer = styled.div`
 
 const Navbar = ({ inverted }) => {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
-  const [signUpModalOpen, setSignUpModalOpen] = useState(false);
+  // const [signUpModalOpen, setSignUpModalOpen] = useState(false);
+  // NOTE: TEMPORARILY REMOVING SIGN_UP MODAL
   return (
     <Menu inverted={inverted} fixed="top" borderless>
       <Container>
@@ -27,13 +28,13 @@ const Navbar = ({ inverted }) => {
               <LoginModal inverted={inverted} open={loginModalOpen} setOpen={setLoginModalOpen} />
             </ButtonContainer>
 
-            <ButtonContainer style={{ marginRight: '0px' }}>
+            {/* <ButtonContainer style={{ marginRight: '0px' }}>
               <SignUpModal
                 inverted={inverted}
                 open={signUpModalOpen}
                 setOpen={setSignUpModalOpen}
               />
-            </ButtonContainer>
+            </ButtonContainer> */}
           </Menu.Item>
         </Menu.Menu>
       </Container>
