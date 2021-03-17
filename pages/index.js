@@ -1,6 +1,6 @@
 import { Button, Icon, Header, Segment, Grid, Image } from 'semantic-ui-react';
 import Navbar from '../sections/Navbar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/dist/client/router';
 import { useSelector } from 'react-redux';
 import HomepageLayout from '../sections/HomePageLayoutFiller';
@@ -20,6 +20,9 @@ const Home = () => {
   // instatiates router object
   const router = useRouter();
 
+  // derives mobile status from window size
+  const mobile = window.innerWidth < 600;
+
   // pushes user to dashboard if already logged in
   useEffect(() => {
     const cookies = parseCookies('token', 'email', 'isVerified', 'logoutUser');
@@ -31,7 +34,6 @@ const Home = () => {
     }
   }, []);
 
-  const mobile = false;
   // const data = useSelector((s) => s);
   return (
     <>
@@ -45,10 +47,10 @@ const Home = () => {
                   as="h1"
                   content="Want to spend less time on due diligence?"
                   style={{
-                    fontSize: mobile ? '2em' : '5em',
+                    fontSize: mobile ? '3em' : '5em',
                     fontWeight: 'bold',
                     marginBottom: 30,
-                    marginTop: mobile ? '1.5em' : '2em'
+                    marginTop: mobile ? '2em' : '1.5em'
                   }}
                 />
               </Grid.Row>
