@@ -1,47 +1,47 @@
-# nextjs-semantic
-> Next.js + ~Semantic UI~ Fomantic-UI + Styled Components
+# Earlystaged
+A Modular Due Diligence Manager
+
+## Project Overview
+### Description
+Earlystaged is a due diligence manager focused on providing a modular experience to angel investors and micro VCs. Each user has a dashboard containing a list of due diligence workspaces. A workspace is created form the dashboard page by supplying the name and domain of the company to be evaluated. Once inside, users can create an unlimited number of Q+A Components. Creating a component requires the user to select a question from a list of presets, and then input their answer. Answers can be input or updated at any time, and users can even create custom questions if no presets are available. Once created, that custom quetion will be available across all of the user's workspaces.
+
+### Future Improvements
+- Answer Types
+- Report Generation + Template Options
+- File sharing
+- Autosaving with websockets
+
+### Landing Page
+![Landing Page](./demoPhotos/LandingScreen.png)
+
+### Dashboard
+![Dashboard](./demoPhotos/Dashboard.png)
+
+### Empty Workspace
+![Empty Workspace](./demoPhotos/EmptyWorkspace.png)
+
+### Creating a Component
+![Create Component](./demoPhotos/CreateComponent.png)
+
+### Workspace
+![Workspace](./demoPhotos/Workspace.png)
+
+### Updating Component
+![Update Component](./demoPhotos/UpdateComponent.png)
+
+### Deleting Workspace
+![DeleteWorkspace](./demoPhotos/DeleteWorkspace.png)
+
+## Core Dependencies
+* Next.js
+* React
+* Fomantic-UI + (Semantic-UI React Bindings)
+* Styled Components
 
 
-## Notice
-Since version 2.0.0 (of this package), Semantic UI was replaced by Fomantic-UI.
-
-
-## Current Versions
-* Next.js 10.0
-* React 17.0
-* Fomantic-UI 2.8
-* Styled Components 5.2
-
-
-## Setup
+## Get Started
 1. clone repo
 2. `npm install`
 3. `npm run semantic:build`
 4. `npm run dev`
 
-
-## Semantic UI React
-* Installed and used by default.
-* Using React components is recommended.
-* Read docs: https://react.semantic-ui.com/
-
-
-## Semantic UI
-* you can remove components to reduce css size on `semantic.json`
-* `.semantic` folder includes source file, from here it's possible to customize default theme
-* change default Google font (Lato) on `.semantic/src/themes/default/globals/site.variables`
-* run `npm run semantic:watch` to watch for changes while customizing theme
-
-
-## Why switching to Fomantic-UI?
-Here are some reasons for the change:
-* Semantic UI requires Node 10
-* Fomantic-UI is actively developed
-* Adds more components
-* Fixes several security vulnerabilities
-
-If you still want to use Semantic UI, get release [1.1.0](https://github.com/skydiver/nextjs-semantic/releases/tag/1.1.0)
-
-
-## Deploy to Vercel
-Just run `vercel` on project dir.
