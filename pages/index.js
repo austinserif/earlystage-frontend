@@ -47,10 +47,10 @@ const Home = () => {
                   as="h1"
                   content="Want to spend less time on due diligence?"
                   style={{
-                    fontSize: mobile ? '2em' : '5em',
+                    fontSize: mobile ? '3em' : '5em',
                     fontWeight: 'bold',
                     marginBottom: 30,
-                    marginTop: mobile ? '1.5em' : '2em'
+                    marginTop: mobile ? '2em' : '1.5em'
                   }}
                 />
               </Grid.Row>
