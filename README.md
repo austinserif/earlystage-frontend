@@ -3,6 +3,23 @@ A Modular Due Diligence Manager
 
 ## Project Overview
 
+### Landing Page
+![Landing Page](./demoPhotos/LandingScreenDemo.png)
+
+### Dashboard
+![Dashboard](./demoPhotos/dashboardDemo.png)
+
+### Creating a Workspace
+![Create Workspace](./demoPhotos/createWorkspaceDemo.png)
+
+### Creating an Component
+![](./demoPhotos/createQuestion.png)
+
+### Workspace
+![Workspace](./demoPhotos/Workspace.png)
+
+### Delete Workspace
+![DeleteWorkspace](./demoPhotos/DeleteWorkspace.png)
 
 ## Core Dependencies
 * Next.js
