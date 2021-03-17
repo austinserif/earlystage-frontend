@@ -1,4 +1,4 @@
-import { List, Button, Loader } from 'semantic-ui-react';
+import { List, Button } from 'semantic-ui-react';
 import useNewComponent from '../../hooks/useNewComponent';
 
 const QuestionItem = ({ details, credentials, workspaceId }) => {
@@ -10,20 +10,16 @@ const QuestionItem = ({ details, credentials, workspaceId }) => {
   const [isLoading, handleClick] = useNewComponent(credentials, payload);
   return (
     <List.Item>
-      {isLoading ? (
-        <Loader active />
-      ) : (
-        <>
-          <List.Content floated="right">
-            <Button onClick={handleClick} color="yellow">
-              Add
-            </Button>
-          </List.Content>
-          <List.Content>
-            <List.Header>{details.question}</List.Header>
-          </List.Content>
-        </>
-      )}
+      <>
+        <List.Content floated="right">
+          <Button loading={isLoading} onClick={handleClick} color="yellow">
+            Add
+          </Button>
+        </List.Content>
+        <List.Content>
+          <List.Header>{details.question}</List.Header>
+        </List.Content>
+      </>
     </List.Item>
   );
 };
