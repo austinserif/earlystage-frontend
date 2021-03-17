@@ -4,21 +4,24 @@ A Modular Due Diligence Manager
 ## Project Overview
 
 ### Landing Page
-![Landing Page](./demoPhotos/LandingScreenDemo.png)
+![Landing Page](./demoPhotos/LandingScreen.png)
 
 ### Dashboard
-![Dashboard](./demoPhotos/dashboardDemo.png)
+![Dashboard](./demoPhotos/Dashboard.png)
 
-### Creating a Workspace
-![Create Workspace](./demoPhotos/createWorkspaceDemo.png)
+### Empty Workspace
+![Empty Workspace](./demoPhotos/EmptyWorkspace.png)
 
-### Creating an Component
-![](./demoPhotos/createQuestion.png)
+### Creating a Component
+![Create Component](./demoPhotos/CreateComponent.png)
 
 ### Workspace
 ![Workspace](./demoPhotos/Workspace.png)
 
-### Delete Workspace
+### Updating Component
+![Update Component](./demoPhotos/UpdateComponent.png)
+
+### Deleting Workspace
 ![DeleteWorkspace](./demoPhotos/DeleteWorkspace.png)
 
 ## Core Dependencies
