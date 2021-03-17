@@ -21,7 +21,7 @@ const Home = () => {
   const router = useRouter();
 
   // derives mobile status from window size
-  const mobile = window.innerWidth < 500;
+  const mobile = window.innerWidth < 600;
 
   // pushes user to dashboard if already logged in
   useEffect(() => {

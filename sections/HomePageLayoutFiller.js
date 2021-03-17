@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable react/no-multi-comp */
 
-import notesIllustration from '../assets/img/notes.svg';
 import veronika from '../assets/img/veronika.jpg';
 
 import React from 'react';
@@ -14,7 +13,7 @@ const HomepageLayout = () => (
         <Grid.Row textAlign="center">
           <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
             <Header as="h3" style={{ fontSize: '2em' }}>
-              &quot;What a Company&quot;
+              &quot;I wish this was around when I was an analyst!&quot;
             </Header>
             <p style={{ fontSize: '1.33em' }}>That is what they all say about us</p>
           </Grid.Column>
@@ -24,7 +23,7 @@ const HomepageLayout = () => (
               &quot;I shouldn&apos;t have gone with their competitor.&quot;
             </Header>
             <p style={{ fontSize: '1.33em' }}>
-              <b>Nan</b> Chief Fun Officer Acme Toys
+              <b>Austin</b> Chief Fun Officer Acme Toys
             </p>
           </Grid.Column>
         </Grid.Row>
