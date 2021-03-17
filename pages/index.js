@@ -32,8 +32,7 @@ const Home = () => {
   }, []);
 
   const mobile = false;
-  const data = useSelector((s) => s);
-  console.log(data);
+  // const data = useSelector((s) => s);
   return (
     <>
       <Navbar inverted={false} />

@@ -2,13 +2,11 @@ import React from 'react';
 import { Modal, Button, Input, Form, Message, Icon } from 'semantic-ui-react';
 import useNewWorkspace from '../hooks/useNewWorkspace';
 import { useSelector } from 'react-redux';
-import cookieCutter from 'cookie-cutter';
 import parseCookies from '../utils/parseCookies';
 
 const NewWorkspaceModal = ({ open, setOpen }) => {
   const cookies = parseCookies('token', 'email');
   const { token, email } = cookies;
-  console.log(token, email);
   const { isLoading, newWorkspaceErrMsg } = useSelector((s) => s.user.workspaces);
   const [values, handleChange, handleReset, handleSubmit] = useNewWorkspace(
     { email, token },

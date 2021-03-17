@@ -1,12 +1,8 @@
 import React from 'react';
 import { Modal, Button, Icon } from 'semantic-ui-react';
-import cookieCutter from 'cookie-cutter';
 import QuestionSelection from '../components/QuestionSelection';
 
 const NewComponentModal = ({ open, setOpen, workspaceId }) => {
-  const token = cookieCutter.get('token');
-  const email = cookieCutter.get('email');
-  console.log(token, email);
   return (
     <Modal
       closeOnEscape={false}
