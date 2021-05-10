@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Popup, Label } from 'semantic-ui-react';
+import { Form, Input, Label } from 'semantic-ui-react';
 import useEmailCapture from './useEmailCapture';
 import Banner from '../Banner';
 
@@ -28,7 +28,7 @@ const EmailCapture = () => {
           />
         </Form.Field>
       </Form>
-      {banner ? <Banner content={{ ...banner }} /> : null}
+      {banner ? <Banner header={banner.header} paragraph={banner.paragraph} /> : null}
     </>
   );
 };
