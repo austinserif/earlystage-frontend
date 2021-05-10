@@ -9,6 +9,7 @@ import Footer from '../sections/Footer';
 import notesIllustration from '../assets/img/notes.svg';
 import cookieCutter from 'cookie-cutter';
 import parseCookies from '../utils/parseCookies';
+import EmailCapture from '../components/EmailCapture';
 
 /**
  * Renders the unauthenticated landing page at the root
@@ -61,10 +62,11 @@ const Home = () => {
                 </p>
               </Grid.Row>
               <Grid.Row>
-                <Button size="massive" icon labelPosition="right" color="yellow">
+                {/* <Button size="massive" icon labelPosition="right" color="yellow">
                   Get Started
                   <Icon name="arrow right" />
-                </Button>
+                </Button> */}
+                <EmailCapture />
               </Grid.Row>
             </Grid.Column>
             <Grid.Column floated="right" width={6}>
