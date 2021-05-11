@@ -10,12 +10,18 @@ import { SERVER_URL } from '../../../config';
  * @param {String} emailString
  */
 export const clientValidation = (emailString) => {
-  // check that email string is not empty
-  if (emailString === '') throw new EarlystageError('Please enter an email', 400);
+  try {
+    // check that email string is not empty
+    if (emailString === '') throw new EarlystageError('Please enter an email', 400);
 
-  // check that email string matches email regex
-  if (!emailString.match(emailRegex))
-    throw new EarlystageError('Not a valid email, check for typos and try again!');
+    // check that email string matches email regex
+    if (!emailString.match(emailRegex))
+      throw new EarlystageError('Not a valid email, check for typos and try again!');
+  } catch (err) {
+    const error = new EarlystageError(err.message, err.statusCode || 500);
+    error.fromClient = true;
+    throw error;
+  }
 };
 
 /**
