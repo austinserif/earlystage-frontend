@@ -44,6 +44,14 @@ const useEmailCapture = () => {
 
       setIsLoading(() => false);
     } catch (err) {
+      if (!err.fromClient) {
+        setError(() => ({
+          content: 'An active user is already associated with this email',
+          pointing: 'below'
+        }));
+        return setIsLoading(() => false);
+      }
+
       // handle error by formatting error message props into obj
       setError(() => ({ content: err.message, pointing: 'below' }));
 
@@ -51,7 +59,11 @@ const useEmailCapture = () => {
     }
   };
 
-  return [email, error, banner, isLoading, handleChange, handleSubmit];
+  const handleDismiss = () => {
+    setBanner(() => false);
+  };
+
+  return [email, error, banner, isLoading, handleChange, handleSubmit, handleDismiss];
 };
 
 export default useEmailCapture;
