@@ -32,14 +32,11 @@ export const submitEmail = async (emailString) => {
     };
 
     // make request and store response in variable
-    const { message } = await axios(config);
+    const response = await axios(config); // should contain `message` property
 
     // returns the message property from response obj, which will
     // be displayed on client as a success banner.
-    return {
-      header: message.header,
-      paragraphHTML: message.paragraph
-    };
+    return response.data.message; // should contain `header` and `paragraph` properties
   } catch (err) {
     // handle and re-format an unformatted errors
     throw new EarlystageError(err.message, err.statusCode || 500);

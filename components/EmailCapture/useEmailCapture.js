@@ -37,10 +37,10 @@ const useEmailCapture = () => {
       clientValidation(email);
 
       // submit email to server if client validation is passed
-      const { message } = await submitEmail(email);
+      const response = await submitEmail(email);
 
       // set the banner message to response string
-      setBanner(() => ({ header: message.header, paragraphHTML: message.paragraph }));
+      setBanner(() => ({ header: response.header, paragraph: response.paragraph }));
 
       setIsLoading(() => false);
     } catch (err) {

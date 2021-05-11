@@ -10,13 +10,12 @@ import { Message } from 'semantic-ui-react';
  * @param {String} content.header Header string for banner
  * @param {String} content.paragraphHTML pargraph string that can contain be html
  */
-const Banner = ({ content }) => {
-  const { header, paragraphHTML } = content;
+const Banner = ({ header, paragraph }) => {
   return (
     <>
       <Message positive>
         <Message.Header>{header}</Message.Header>
-        <p>{paragraphHTML}</p>
+        <p>{paragraph}</p>
       </Message>
     </>
   );
