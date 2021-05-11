@@ -8,12 +8,12 @@ import { Message } from 'semantic-ui-react';
  *
  * @param {Object} content
  * @param {String} content.header Header string for banner
- * @param {String} content.paragraphHTML pargraph string that can contain be html
+ * @param {String} content.paragraph pargraph string that can contain be html
  */
-const Banner = ({ header, paragraph }) => {
+const Banner = ({ header, paragraph, handleDismiss }) => {
   return (
     <>
-      <Message positive>
+      <Message positive onDismiss={handleDismiss}>
         <Message.Header>{header}</Message.Header>
         <p>{paragraph}</p>
       </Message>
