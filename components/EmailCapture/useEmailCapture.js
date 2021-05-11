@@ -16,6 +16,11 @@ const useEmailCapture = () => {
   const [error, setError] = useState(false); // this will either be false, or an object containing two properties: `content`, and `pointing`
   const [banner, setBanner] = useState(false); // this will either be false, or an object containing two properties:
 
+  /** Resets the email value in state to an empty string */
+  const resetEmail = () => {
+    setEmail(() => '');
+  };
+
   /** updates the `email` value in state whenever
    * a keystroke event triggers an update to the input
    * field.
@@ -38,6 +43,9 @@ const useEmailCapture = () => {
 
       // submit email to server if client validation is passed
       const response = await submitEmail(email);
+
+      // reset the input field
+      resetEmail();
 
       // set the banner message to response string
       setBanner(() => ({ header: response.header, paragraph: response.paragraph }));
