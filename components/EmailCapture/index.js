@@ -4,7 +4,15 @@ import useEmailCapture from './useEmailCapture';
 import Banner from '../Banner';
 
 const EmailCapture = () => {
-  const [email, error, banner, isLoading, handleChange, handleSubmit] = useEmailCapture();
+  const [
+    email,
+    error,
+    banner,
+    isLoading,
+    handleChange,
+    handleSubmit,
+    handleDismiss
+  ] = useEmailCapture();
   return (
     <>
       <Form loading={isLoading}>
@@ -23,12 +31,15 @@ const EmailCapture = () => {
               labelPosition: 'right',
               icon: 'arrow right',
               content: 'Sign Up',
+              color: 'yellow',
               disabled: isLoading
             }}
           />
         </Form.Field>
       </Form>
-      {banner ? <Banner header={banner.header} paragraph={banner.paragraph} /> : null}
+      {banner ? (
+        <Banner handleDismiss={handleDismiss} header={banner.header} paragraph={banner.paragraph} />
+      ) : null}
     </>
   );
 };
