@@ -11,6 +11,7 @@ const StyledContainer = styled.div`
 `;
 
 const CompleteSignUpPage = () => {
+  console.log('page opens');
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
 
