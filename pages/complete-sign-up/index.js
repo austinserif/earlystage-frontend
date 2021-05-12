@@ -12,7 +12,6 @@ const StyledContainer = styled.div`
 
 const CompleteSignUpPage = () => {
   const router = useRouter();
-  if (!router.query.code) router.push('/');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -32,7 +31,7 @@ const CompleteSignUpPage = () => {
         router.push('/');
       }
     };
-
+    if (!router.query.hasOwnProperty('code')) router.push('/');
     fetchUser();
   }, []);
 
