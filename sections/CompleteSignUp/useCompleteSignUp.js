@@ -67,8 +67,6 @@ const useCompleteSignUp = (id) => {
         updateErrors(err.details);
       }
       setIsLoading(() => false);
-    } finally {
-      console.log(values);
     }
   };
 
