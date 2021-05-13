@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import CompleteSignUp from '../../sections/CompleteSignUp';
 import styled from 'styled-components';
 import { useRouter } from 'next/dist/client/router';
-import { Loader } from 'semantic-ui-react';
 import { SERVER_URL } from '../../config';
 import axios from 'axios';
 
@@ -10,41 +9,43 @@ const StyledContainer = styled.div`
   margin: 20px;
 `;
 
-const CompleteSignUpPage = () => {
-  console.log('page opens');
+const CompleteSignUpPage = ({ notFound, code }) => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        // throws error if no unverified user resource is found
-        await axios({
-          method: 'get',
-          baseURL: SERVER_URL,
-          url: `/register/check-user?code=${router.query.code}`
-        });
-
-        // turn off loading
-        setIsLoading(() => false);
-      } catch (err) {
-        // redirect if anything goes wrong or user is unauthorized
-        router.push('/');
-      }
-    };
-    if (!router.query.hasOwnProperty('code')) router.push('/');
-    fetchUser();
-  }, []);
-
-  if (isLoading) return <Loader active content="Checking user status..." />;
+  if (notFound) router.push('/');
 
   return (
     <>
       <StyledContainer>
-        <CompleteSignUp />
+        <CompleteSignUp code={code} />
       </StyledContainer>
     </>
   );
 };
+
+export async function getServerSideProps(context) {
+  try {
+    // get code param from query strings
+    const { code } = context.query;
+
+    // returns a prop object containing `notFound: true` so the page knows to redirect
+    if (code === undefined) return { props: { notFound: true } };
+
+    // check that the code is valid
+    await axios({
+      method: 'GET',
+      baseURL: SERVER_URL,
+      url: `/register/check-user?code=${code}`
+    });
+
+    return {
+      props: {
+        code,
+        notFound: false
+      }
+    };
+  } catch (err) {
+    return { props: { notFound: true } };
+  }
+}
 
 export default CompleteSignUpPage;

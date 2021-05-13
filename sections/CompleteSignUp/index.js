@@ -2,11 +2,9 @@ import { Header, Form, Button } from 'semantic-ui-react';
 import useCompleteSignUp from './useCompleteSignUp';
 import { useRouter } from 'next/dist/client/router';
 
-const CompleteSignUp = () => {
+const CompleteSignUp = ({ code }) => {
   const router = useRouter();
-  const [values, errors, isLoading, handleChange, handleSubmit, success] = useCompleteSignUp(
-    router.query.code
-  );
+  const [values, errors, isLoading, handleChange, handleSubmit, success] = useCompleteSignUp(code);
   if (success) {
     return (
       <>
