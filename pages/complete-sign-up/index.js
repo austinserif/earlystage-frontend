@@ -1,13 +1,12 @@
 import React from 'react';
 import CompleteSignUp from '../../sections/CompleteSignUp';
-import styled from 'styled-components';
 import { useRouter } from 'next/dist/client/router';
 import { SERVER_URL } from '../../config';
 import axios from 'axios';
 
-const StyledContainer = styled.div`
-  margin: 20px;
-`;
+// const StyledContainer = styled.div`
+//   margin: 20px;
+// `;
 
 const CompleteSignUpPage = ({ notFound, code }) => {
   const router = useRouter();
@@ -15,9 +14,9 @@ const CompleteSignUpPage = ({ notFound, code }) => {
 
   return (
     <>
-      <StyledContainer>
+      <div style={{ margin: '20px' }}>
         <CompleteSignUp code={code} />
-      </StyledContainer>
+      </div>
     </>
   );
 };
